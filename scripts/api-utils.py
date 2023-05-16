@@ -29,17 +29,17 @@ from typing import List, Tuple
 CGI_API_ENDPOINT = "https://api.cgiclinics.eu"
 
 # User (CGI mail)
-USER = os.getenv("CGI_USER")
-if USER is None:
+CGI_USER = os.getenv("CGI_USER")
+if CGI_USER is None:
     print("ERROR: Missing environment variable CGI_USER")
     sys.exit(1)
 
 # Token (obtainable at your profile in the CGI-Clinics web)
-TOKEN = os.getenv("CGI_TOKEN")
-if TOKEN is None:
+CGI_TOKEN = os.getenv("CGI_TOKEN")
+if CGI_TOKEN is None:
     print("ERROR: Missing environment variable CGI_TOKEN")
     sys.exit(1)
-AUTH = {'access_token': f"{USER} {TOKEN}"}
+AUTH = {'access_token': f"{CGI_USER} {CGI_TOKEN}"}
 
 # * === FUNCTIONS - MAIN ===
 def create_patient(project_id: str, patient_key: str, auth: dict) -> str:
@@ -56,6 +56,19 @@ def create_patient(project_id: str, patient_key: str, auth: dict) -> str:
         print(f"ERROR: Creating patient {patient_key}\n {res.json()['detail']}")
     else:
         print(f"ERROR: Creating patient {patient_key}. Status code: {res.status_code}")
+    sys.exit(1)
+
+def delete_patient(project_id: str, patient_id: str, auth: dict) -> None:
+    """
+    Delete a patient in a project.
+    """
+    res = requests.delete(f"{CGI_API_ENDPOINT}/projects/{project_id}/patients/{patient_id}", headers=auth)
+    if res.status_code == 200:
+        return
+    elif res.status_code == 422:
+        print(f"ERROR: Deleting patient {patient_id}\n {res.json()['detail']}")
+    else:
+        print(f"ERROR: Deleting patient {patient_id}. Status code: {res.status_code}")
     sys.exit(1)
 
 def create_sample(project_id: str, patient_id: str, sample_key: str, sample_source: str, cancer_type: str, auth: dict) -> str:
@@ -110,15 +123,33 @@ def create_analysis(project_id, patient_id, sample_id, sequencing_id, title, ref
         # 1. Request an upload URL for the file
         file_id, upload_url = request_upload(project_id, patient_id, sample_id, sequencing_id, extension, AUTH)
         # 2. Upload the file
-        print(f"Uploading {input_file} to {upload_url}...", end="")
         upload_file(upload_url, input_file)
-        print("Done")
         # 3. Add the file to the list of files to be analyzed
         file_ids.append(file_id)
     
     # Start the analysis
     analysis_id = start_analysis(project_id, patient_id, sample_id, sequencing_id, file_ids, reference, title, AUTH)
-    print(f"New analysis created with ID {analysis_id}. Browse it at: https://platform.cgiclinics.eu/analysis?gid={project_id}&aid={analysis_id}")
+    # print(f"New analysis created with ID {analysis_id}. Browse it at: https://platform.cgiclinics.eu/analysis?gid={project_id}&aid={analysis_id}")
+
+    return analysis_id
+
+def download_analysis(project_id: str, sample_id: str, sequencing_id: str, analysis_id: str, output_dir: str, auth: dict):
+    """
+    Download an analysis to a directory.
+    """
+    payload = {
+        "project_id": project_id,
+        "sample_id": sample_id,
+        "sequencing_id": sequencing_id,
+        "analysis_id": analysis_id
+    }
+    res = requests.post(f"{CGI_API_ENDPOINT}/projects/{project_id}/samples/{sample_id}/sequencing/{sequencing_id}/analysis/{analysis_id}/results", headers=auth, json=payload)
+    if res.status_code == 200:
+        data = res.json()
+        for file in data['files']:
+            print(f"Downloading {file['name']} to {output_dir}...", end="")
+            download_file(file['url'], output_dir)
+            print("Done")
 
 # * === FUNCTIONS - EXTRA ===
 def check_project(project_id: str, auth: dict) -> bool:
@@ -131,6 +162,21 @@ def check_project(project_id: str, auth: dict) -> bool:
         print(f"Project >{data['name']}< found.")
     elif res.status_code == 400:
         print(f"ERROR: Project ID {project_id} not found")
+        sys.exit(1)
+    else:
+        print(f"ERROR: Bad API response, check your CGI_USER and CGI_TOKEN credentials")
+        sys.exit(1)
+
+def check_patient(project_id: str, patient_id: str, auth: dict) -> bool:
+    """
+    Check if a patient exists.
+    """
+    res = requests.get(f"{CGI_API_ENDPOINT}/projects/{project_id}/patients/{patient_id}", headers=auth)
+    if res.status_code == 200:
+        data = res.json()
+        print(f"Patient >{data['name']}< found.")
+    elif res.status_code == 400:
+        print(f"ERROR: Patient ID {patient_id} not found")
         sys.exit(1)
     else:
         print(f"ERROR: Bad API response, check your CGI_USER and CGI_TOKEN credentials")
@@ -196,9 +242,20 @@ def is_analysis_done(project_id: str, analysis_id: str, auth: dict) -> bool:
     res = requests.get(f"{CGI_API_ENDPOINT}/projects/{project_id}/analysis/{analysis_id}", headers=auth)
     if res.status_code == 200:
         data = res.json()
-        return data['status'] == "done"
+        return (data['status'] != "waiting", data['status'])
     elif res.status_code == 422:
         print(f"ERROR: Checking analysis status\n {res.json()['detail']}")
     else:
         print(f"ERROR: Checking analysis status. Status code: {res.status_code}")
     sys.exit(1)
+
+def download_file(url: str, output_dir: str):
+    """
+    Download a file to a directory.
+    """
+    file_name = url.split("/")[-1]
+    with requests.get(url, stream=True) as r:
+        r.raise_for_status()
+        with open(f"{output_dir}/{file_name}", 'wb') as f:
+            for chunk in r.iter_content(chunk_size=8192): 
+                f.write(chunk)
