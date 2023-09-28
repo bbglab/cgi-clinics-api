@@ -97,6 +97,7 @@ def cli():
     parser.add_argument("--patient-key", help="Patient key", type=str, required=True)
     parser.add_argument("--sample-key", help="Sample key", type=str, required=True)
     parser.add_argument("--sequencing-key", help="Sequencing key", type=str, required=True)
+    parser.add_argument("--use_for_cgi", help="Use for CGI", action='store_true')
     parser.add_argument("--sample-source", help="Sample source", type=SampleSource, choices=list(SampleSource), required=True)
     parser.add_argument("--sequencing-type", help="Sequencing type", type=SequencingType, choices=list(SequencingType), required=True)
     parser.add_argument("--calling-germline", help="Mutation calling performed with germline control sample", type=SequencingMutCallGermline, choices=list(SequencingMutCallGermline), required=True)
@@ -126,7 +127,7 @@ def cli():
     check_project(args.project_id, auth)
 
     # Create new patient
-    patient_id = create_patient(args.project_id, args.patient_key, auth)
+    patient_id = create_patient(args.project_id, args.patient_key, args.use_for_cgi, auth)
     print(f"New patient {patient_id} created")
 
     # Create new sample
@@ -178,7 +179,7 @@ def start_analysis(project_id: str, patient_id: str, sample_id: str, sequencing_
     res = requests.post(f"{CGI_API_ENDPOINT}/projects/{project_id}/patients/{patient_id}/samples/{sample_id}/sequencings/{sequencing_id}/analysis", headers=auth, json=payload)
     if res.status_code == 200:
         return res.json()['id']
-    elif res.status_code == 422:
+    elif res.status_code:
         print(f"ERROR: Creating analysis request\n {res.json()['detail']}")
     else:
         print(f"ERROR: Creating analysis request. Status code: {res.status_code}")
@@ -230,9 +231,10 @@ def create_sample(project_id: str, patient_id: str, sample_key: str, sample_sour
     sys.exit(1)
 
 
-def create_patient(project_id: str, patient_key: str, auth: dict) -> str:
+def create_patient(project_id: str, patient_key: str, use_for_cgi: bool, auth: dict) -> str:
     payload = {
-        "key": patient_key
+        "key": patient_key,
+        "use_for_cgi": use_for_cgi
     }
     res = requests.post(f"{CGI_API_ENDPOINT}/projects/{project_id}/patients", headers=auth, json=payload)
     if res.status_code == 200:
