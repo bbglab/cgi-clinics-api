@@ -81,7 +81,7 @@ def get_all_projects_paginated(
         "page": page,
     }
     response: requests.Response = requests.get(
-        "https://v2.cgiclinics.eu/api/1.0/project/full", headers=main_headers, timeout=20, params=params
+        "https://v2.cgiclinics.eu/api/1.0/project", headers=main_headers, timeout=20, params=params
     )
     if not 200 <= response.status_code < 300:
         print(f"Failed to get projects: {response.text}")
