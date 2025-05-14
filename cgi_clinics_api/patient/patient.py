@@ -66,8 +66,8 @@ def get_all_patients(
         "https://v2.cgiclinics.eu/api/1.0/patient/full", headers=main_headers, timeout=20, json=body
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get patients: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get patients: {response.text}")
+        print(f"Failed to get patients: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to get patients: {response.status_code} - {response.text}")
     print(f"Patients retrieved successfully: {len(response.json())} patients found")
 
     return response.json()
@@ -133,8 +133,8 @@ def get_all_patients_paginated(
         f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/patient", headers=main_headers, timeout=20, json=body
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get patients: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get patients: {response.text}")
+        print(f"Failed to get patients: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to get patients: {response.status_code} - {response.text}")
     print(f"Patients retrieved successfully: {len(response.json())} patients found")
 
     return response.json()
@@ -173,8 +173,8 @@ def get_patient_by_uuid(
         timeout=20,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get patient: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get patient: {response.text}")
+        print(f"Failed to get patient: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to get patient: {response.status_code} - {response.text}")
     print("Patient retrieved successfully")
 
     return response.json()
@@ -297,8 +297,8 @@ def create_patient(
 
     # Handle the response
     if not 200 <= response.status_code < 300:
-        print(f"Failed to create patient: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to create patient: {response.text}")
+        print(f"Failed to create patient: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to create patient: {response.status_code} - {response.text}")
     print(f"Patient created successfully with ID: {patient_id}")
 
     return response.json()
@@ -423,8 +423,8 @@ def update_patient(
 
     # Handle the response
     if not 200 <= response.status_code < 300:
-        print(f"Failed to update patient: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to update patient: {response.text}")
+        print(f"Failed to update patient: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to update patient: {response.status_code} - {response.text}")
     print(f"Patient updated successfully with ID: {patient_id}")
 
     return response.json()
@@ -465,8 +465,8 @@ def delete_patient(project_uuid: str, patient_uuid: str, main_headers: dict[str,
         timeout=20,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to delete patient: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to delete patient: {response.text}")
+        print(f"Failed to delete patient: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to delete patient: {response.status_code} - {response.text}")
     print(f"Patient deleted successfully with ID: {patient_uuid}")
 
     return response.json()

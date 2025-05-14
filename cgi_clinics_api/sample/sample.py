@@ -43,8 +43,8 @@ def get_all_samples(
     )
 
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get samples: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get samples: {response.text}")
+        print(f"Failed to get samples (Error {response.status_code}): {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to get samples (Error {response.status_code}): {response.text}")
 
     print(f"Samples retrieved successfully for projects: {project_uuids}")
 
@@ -99,8 +99,8 @@ def get_all_samples_paginated(
     )
 
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get samples: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get samples: {response.text}")
+        print(f"Failed to get samples (Error {response.status_code}): {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to get samples (Error {response.status_code}): {response.text}")
 
     print(f"Samples retrieved successfully for projects: {project_uuids}")
 
@@ -137,8 +137,8 @@ def get_sample_by_uuid(project_uuid: str, sample_uuid: str, main_headers: dict[s
     )
 
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get sample: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get sample: {response.text}")
+        print(f"Failed to get sample (Error {response.status_code}): {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to get sample (Error {response.status_code}): {response.text}")
 
     print(f"Sample retrieved successfully: {sample_uuid}")
 
@@ -263,8 +263,8 @@ def create_sample(
 
     # Handle the response
     if not 200 <= response.status_code < 300:
-        print(f"Failed to create sample: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to create sample: {response.text}")
+        print(f"Failed to create sample (Error {response.status_code}): {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to create sample (Error {response.status_code}): {response.text}")
     print(f"Sample created successfully with ID: {sample_id}")
 
     return response.json()
@@ -374,8 +374,8 @@ def update_sample(
     )
     # Handle the response
     if not 200 <= response.status_code < 300:
-        print(f"Failed to update sample: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to update sample: {response.text}")
+        print(f"Failed to update sample (Error {response.status_code}): {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to update sample (Error {response.status_code}): {response.text}")
     print(f"Sample updated successfully with ID: {sample_uuid}")
 
     return response.json()
@@ -415,8 +415,8 @@ def delete_sample(project_uuid: str, sample_uuid: str, main_headers: dict[str, s
     )
 
     if not 200 <= response.status_code < 300:
-        print(f"Failed to delete sample: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to delete sample: {response.text}")
+        print(f"Failed to delete sample (Error {response.status_code}): {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to delete sample (Error {response.status_code}): {response.text}")
 
     print(f"Sample deleted successfully: {sample_uuid}")
 

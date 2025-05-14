@@ -41,8 +41,8 @@ def get_all_projects(main_headers: dict[str, str], name: str | None = None, size
         "https://v2.cgiclinics.eu/api/1.0/project/full", headers=main_headers, timeout=20, params=params
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get projects: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get projects: {response.text}")
+        print(f"Failed to get projects: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to get projects: {response.status_code} - {response.text}")
     print(f"Projects retrieved successfully: {len(response.json())} projects found")
 
     return response.json()
@@ -84,8 +84,8 @@ def get_all_projects_paginated(
         "https://v2.cgiclinics.eu/api/1.0/project", headers=main_headers, timeout=20, params=params
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get projects: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get projects: {response.text}")
+        print(f"Failed to get projects: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to get projects: {response.status_code} - {response.text}")
     print(f"Projects retrieved successfully: {len(response.json())} projects found")
 
     return response.json()
@@ -122,8 +122,8 @@ def get_project_by_uuid(project_uuid: str, main_headers: dict[str, str]) -> dict
     )
 
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get project: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get project: {response.text}")
+        print(f"Failed to get project: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to get project: {response.status_code} - {response.text}")
 
     print(f"Project retrieved successfully: {project_uuid}")
 
@@ -164,14 +164,11 @@ def create_project(project_name: str, main_headers: dict[str, str]) -> dict:
         "https://v2.cgiclinics.eu/api/1.0/project", headers=main_headers, timeout=20, json=params
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to create project: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to create project: {response.text}")
+        print(f"Failed to create project: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to create project: {response.status_code} - {response.text}")
     print(f"Project created successfully: {project_name}")
 
     return response.json()
-
-
-
 
 
 # endregion POST
@@ -205,8 +202,8 @@ def delete_project(project_uuid: str, main_headers: dict[str, str]) -> dict:
         f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}", headers=main_headers, timeout=20
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to delete project: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to delete project: {response.text}")
+        print(f"Failed to delete project: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to delete project: {response.status_code} - {response.text}")
     print(f"Project deleted successfully: {project_uuid}")
 
     return response.json()

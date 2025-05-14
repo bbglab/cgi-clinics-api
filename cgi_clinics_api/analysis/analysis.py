@@ -37,8 +37,8 @@ def get_all_analyses(project_uuid: str, main_headers: dict[str, str]) -> dict:
         timeout=20,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get analyses: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get analyses: {response.text}")
+        print(f"Failed to get analyses: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to get analyses: {response.status_code} - {response.text}")
     print(f"Analyses retrieved successfully: {len(response.json())} analyses found")
 
     return response.json()
@@ -80,8 +80,8 @@ def get_all_analyses_paginated(project_uuid: str, main_headers: dict[str, str], 
         params=params,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get analyses: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get analyses: {response.text}")
+        print(f"Failed to get analyses: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to get analyses: {response.status_code} - {response.text}")
     print(f"Analyses retrieved successfully: {len(response.json())} analyses found")
 
     return response.json()
@@ -116,8 +116,8 @@ def get_analysis_by_uuid(project_uuid: str, analysis_uuid: str, main_headers: di
         timeout=20,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get analysis: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get analysis: {response.text}")
+        print(f"Failed to get analysis: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to get analysis: {response.status_code} - {response.text}")
     print(f"Analysis retrieved successfully: {response.json()}")
 
     return response.json()
@@ -156,8 +156,8 @@ def get_analysis_result_summary(
         timeout=20,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get analysis summary: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get analysis summary: {response.text}")
+        print(f"Failed to get analysis summary: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to get analysis summary: {response.status_code} - {response.text}")
 
     print("Analysis summary retrieved successfully")
     output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -201,8 +201,10 @@ def get_analysis_result_mutations(
         timeout=20,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get analysis mutations: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get analysis mutations: {response.text}")
+        print(f"Failed to get analysis mutations: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(
+            f"Failed to get analysis mutations: {response.status_code} - {response.text}"
+        )
 
     print("Analysis mutations retrieved successfully")
     output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -246,8 +248,10 @@ def get_analysis_result_biomarkers(
         timeout=20,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get analysis biomarkers: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get analysis biomarkers: {response.text}")
+        print(f"Failed to get analysis biomarkers: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(
+            f"Failed to get analysis biomarkers: {response.status_code} - {response.text}"
+        )
 
     print("Analysis biomarkers retrieved successfully")
     output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -291,8 +295,8 @@ def get_analysis_result_cnas(
         timeout=20,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get analysis CNAs: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get analysis CNAs: {response.text}")
+        print(f"Failed to get analysis CNAs: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to get analysis CNAs: {response.status_code} - {response.text}")
 
     print("Analysis CNAs retrieved successfully")
     output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -336,8 +340,8 @@ def get_analysis_result_fusions(
         timeout=20,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get analysis fusions: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get analysis fusions: {response.text}")
+        print(f"Failed to get analysis fusions: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to get analysis fusions: {response.status_code} - {response.text}")
 
     print("Analysis fusions retrieved successfully")
     output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -439,8 +443,8 @@ def create_analysis(
     )
 
     if not 200 <= response.status_code < 300:
-        print(f"Failed to create analysis: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to create analysis: {response.text}")
+        print(f"Failed to create analysis: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to create analysis: {response.status_code} - {response.text}")
 
     print(f"Analysis created successfully: {analysis_id}")
     return response.json()
@@ -577,8 +581,10 @@ def create_direct_analysis(
     )
 
     if not 200 <= response.status_code < 300:
-        print(f"Failed to create direct analysis: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to create direct analysis: {response.text}")
+        print(f"Failed to create direct analysis: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(
+            f"Failed to create direct analysis: {response.status_code} - {response.text}"
+        )
 
     print(f"Direct analysis created successfully: {analysis_id}")
     return response.json()
@@ -619,8 +625,8 @@ def delete_analysis(project_uuid: str, analysis_uuid: str, main_headers: dict[st
         timeout=20,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to delete analysis: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to delete analysis: {response.text}")
+        print(f"Failed to delete analysis: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to delete analysis: {response.status_code} - {response.text}")
     print(f"Analysis deleted successfully: {analysis_uuid}")
 
     return response.json()
@@ -663,8 +669,10 @@ def request_temporal_upload(project_uuid: str, main_headers: dict[str, str]) -> 
     )
 
     if not 200 <= temporal_response.status_code < 300:
-        print(f"Failed to request temporal upload: {temporal_response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to request temporal upload: {temporal_response.text}")
+        print(f"Failed to request temporal upload: {temporal_response.status_code} - {temporal_response.text}")
+        raise requests.exceptions.HTTPError(
+            f"Failed to request temporal upload: {temporal_response.status_code} - {temporal_response.text}"
+        )
     print(f"Temporal upload request created successfully: {temporal_response.json()}")
 
     return temporal_response.json()
@@ -720,8 +728,10 @@ def upload_file_to_temporal(
             files={"file": file},
         )
     if not 200 <= upload_response.status_code < 300:
-        print(f"Failed to upload file: {upload_response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to upload file: {upload_response.text}")
+        print(f"Failed to upload file: {upload_response.status_code} - {upload_response.text}")
+        raise requests.exceptions.HTTPError(
+            f"Failed to upload file: {upload_response.status_code} - {upload_response.text}"
+        )
 
     print(f"File uploaded successfully: {file_path}")
     print(f"File UUID: {upload_response.json()['uuid']}")

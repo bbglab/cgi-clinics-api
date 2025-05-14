@@ -52,8 +52,10 @@ def get_all_sequencings(
         "https://v2.cgiclinics.eu/api/1.0/sequencing/full", headers=main_headers, timeout=20, params=params
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get sequencings: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get sequencings: {response.text}")
+        print(f"Failed to get sequencings (Error {response.status_code}): {response.text}")
+        raise requests.exceptions.HTTPError(
+            f"Failed to get sequencings (Error {response.status_code}): {response.text}"
+        )
     print(f"Sequencings retrieved successfully: {len(response.json())} sequencings found")
 
     return response.json()
@@ -109,8 +111,10 @@ def get_all_sequencings_paginated(
         f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/sequencing", headers=main_headers, timeout=20, params=params
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get sequencings: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get sequencings: {response.text}")
+        print(f"Failed to get sequencings (Error {response.status_code}): {response.text}")
+        raise requests.exceptions.HTTPError(
+            f"Failed to get sequencings (Error {response.status_code}): {response.text}"
+        )
     print(f"Sequencings retrieved successfully: {len(response.json())} sequencings found")
 
     return response.json()
@@ -149,8 +153,10 @@ def get_sequencing_by_uuid(
         timeout=20,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to get sequencings: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to get sequencings: {response.text}")
+        print(f"Failed to get sequencings (Error {response.status_code}): {response.text}")
+        raise requests.exceptions.HTTPError(
+            f"Failed to get sequencings (Error {response.status_code}): {response.text}"
+        )
     print(f"Sequencings retrieved successfully: {len(response.json())} sequencings found")
 
     return response.json()
@@ -240,8 +246,10 @@ def create_sequencing(
 
     # Handle the response
     if not 200 <= response.status_code < 300:
-        print(f"Failed to create sequencing: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to create sequencing: {response.text}")
+        print(f"Failed to create sequencing (Error {response.status_code}): {response.text}")
+        raise requests.exceptions.HTTPError(
+            f"Failed to create sequencing (Error {response.status_code}): {response.text}"
+        )
     print(f"Sequencing created successfully with ID: {sequencing_id}")
 
     return response.json()
@@ -329,8 +337,10 @@ def update_sequencing(
     )
     # Handle the response
     if not 200 <= response.status_code < 300:
-        print(f"Failed to update sequencing: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to update sequencing: {response.text}")
+        print(f"Failed to update sequencing (Error {response.status_code}): {response.text}")
+        raise requests.exceptions.HTTPError(
+            f"Failed to update sequencing (Error {response.status_code}): {response.text}"
+        )
     print(f"Sequencing updated successfully with ID: {sequencing_id}")
 
     return response.json()
@@ -375,8 +385,10 @@ def delete_sequencing(
         timeout=20,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to delete sequencing: {response.text}")
-        raise requests.exceptions.HTTPError(f"Failed to delete sequencing: {response.text}")
+        print(f"Failed to delete sequencing (Error {response.status_code}): {response.text}")
+        raise requests.exceptions.HTTPError(
+            f"Failed to delete sequencing (Error {response.status_code}): {response.text}"
+        )
     print(f"Sequencing deleted successfully: {sequencing_uuid}")
 
     return response.json()

@@ -34,9 +34,9 @@ def get_all_sequencing_types(project_uuid: str, main_headers: dict[str, str]) ->
         timeout=20,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to fetch sequencing types: {response.status_code} - {response.text}")
+        print(f"Failed to fetch sequencing types (Error {response.status_code}): {response.text}")
         raise requests.exceptions.HTTPError(
-            f"Failed to fetch sequencing types: {response.status_code} - {response.text}"
+            f"Failed to fetch sequencing types (Error {response.status_code}): {response.text}"
         )
     print(f"Fetched {len(response.json())} sequencing types")
 
@@ -81,9 +81,9 @@ def get_all_sequencing_types_paginated(
         timeout=20,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to fetch sequencing types: {response.status_code} - {response.text}")
+        print(f"Failed to fetch sequencing types (Error {response.status_code}): {response.text}")
         raise requests.exceptions.HTTPError(
-            f"Failed to fetch sequencing types: {response.status_code} - {response.text}"
+            f"Failed to fetch sequencing types (Error {response.status_code}): {response.text}"
         )
     print(f"Fetched {len(response.json())} sequencing types")
 
@@ -129,9 +129,9 @@ def create_sequencing_type(project_uuid: str, main_headers: dict[str, str], sequ
         timeout=20,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to create sequencing type: {response.status_code} - {response.text}")
+        print(f"Failed to create sequencing type (Error {response.status_code}): {response.text}")
         raise requests.exceptions.HTTPError(
-            f"Failed to create sequencing type: {response.status_code} - {response.text}"
+            f"Failed to create sequencing type (Error {response.status_code}): {response.text}"
         )
     print(f"Created sequencing type with ID: {response.json().get('id')}")
 
@@ -184,9 +184,9 @@ def update_sequencing_type(
         timeout=20,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to update sequencing type: {response.status_code} - {response.text}")
+        print(f"Failed to update sequencing type (Error {response.status_code}): {response.text}")
         raise requests.exceptions.HTTPError(
-            f"Failed to update sequencing type: {response.status_code} - {response.text}"
+            f"Failed to update sequencing type (Error {response.status_code}): {response.text}"
         )
     print(f"Updated sequencing type with ID: {response.json().get('id')}")
 
@@ -223,9 +223,9 @@ def delete_sequencing_type(project_uuid: str, sequencing_type_id: str, main_head
         timeout=20,
     )
     if not 200 <= response.status_code < 300:
-        print(f"Failed to delete sequencing type: {response.status_code} - {response.text}")
+        print(f"Failed to delete sequencing type (Error {response.status_code}): {response.text}")
         raise requests.exceptions.HTTPError(
-            f"Failed to delete sequencing type: {response.status_code} - {response.text}"
+            f"Failed to delete sequencing type (Error {response.status_code}): {response.text}"
         )
     print(f"Deleted sequencing type with ID: {sequencing_type_id}")
 
