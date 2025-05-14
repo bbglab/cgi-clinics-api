@@ -43,10 +43,10 @@ def get_all_sequencings(
     """
     print("Fetching all sequencings")
     params: dict = {
-        "project_uuids": project_uuids,
-        "patient_uuids": patient_uuids,
-        "sample_uuids": sample_uuids,
-        "patient_id": patient_id,
+        "projectUuids": project_uuids,
+        "patientUuids": patient_uuids,
+        "sampleUuids": sample_uuids,
+        "patientId": patient_id,
     }
     response: requests.Response = requests.get(
         "https://v2.cgiclinics.eu/api/1.0/sequencing/full", headers=main_headers, timeout=20, params=params
@@ -99,9 +99,9 @@ def get_all_sequencings_paginated(
     """
     print("Fetching all sequencings")
     params: dict = {
-        "project_uuids": project_uuids,
-        "patient_uuids": patient_uuids,
-        "sample_uuids": sample_uuids,
+        "projectUuids": project_uuids,
+        "patientUuids": patient_uuids,
+        "sampleUuids": sample_uuids,
         "size": size,
         "page": page,
     }

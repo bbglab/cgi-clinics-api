@@ -52,8 +52,8 @@ def get_all_patients(
         If the request fails.
     """
     print("Fetching all patients")
-    params: dict = {
-        "project_uuid": project_uuid,
+    body: dict = {
+        "projectUuid": project_uuid,
         "patient_id": patient_id,
         "gender": gender,
         "diagnosis_date_equals": diagnosis_date_equals,
@@ -63,7 +63,7 @@ def get_all_patients(
     }
 
     response: requests.Response = requests.get(
-        "https://v2.cgiclinics.eu/api/1.0/patient/full", headers=main_headers, timeout=20, params=params
+        "https://v2.cgiclinics.eu/api/1.0/patient/full", headers=main_headers, timeout=20, json=body
     )
     if not 200 <= response.status_code < 300:
         print(f"Failed to get patients: {response.text}")
@@ -117,20 +117,20 @@ def get_all_patients_paginated(
         If the request fails.
     """
     print("Fetching all patients")
-    params: dict = {
-        "project_uuid": project_uuid,
-        "patient_id": patient_id,
+    body: dict = {
+        "projectUuid": project_uuid,
+        "patientId": patient_id,
         "gender": gender,
-        "diagnosis_date_equals": diagnosis_date_equals,
-        "last_cgi_analysis_date_equals": last_cgi_analysis_date_equals,
-        "birth_date_before": birth_date_before,
-        "birth_date_after": birth_date_after,
+        "diagnosisDateEquals": diagnosis_date_equals,
+        "lastCgiAnalysisDateEquals": last_cgi_analysis_date_equals,
+        "birthDateBefore": birth_date_before,
+        "birthDateAfter": birth_date_after,
         "size": size,
         "page": page,
     }
 
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/patient", headers=main_headers, timeout=20, params=params
+        f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/patient", headers=main_headers, timeout=20, json=body
     )
     if not 200 <= response.status_code < 300:
         print(f"Failed to get patients: {response.text}")
@@ -268,7 +268,7 @@ def create_patient(
     print(f"Creating new patient with ID: {patient_id}")
 
     # Build the request payload
-    patient_data: dict[str, str | int | list[dict] | None] = {
+    body: dict[str, str | int | list[dict] | None] = {
         "patientId": patient_id,
         "birthDate": birth_date,
         "gender": gender,
@@ -291,7 +291,7 @@ def create_patient(
     response: requests.Response = requests.post(
         f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/patient/{patient_uuid}",
         headers=main_headers,
-        json=patient_data,
+        json=body,
         timeout=20,
     )
 
@@ -394,7 +394,7 @@ def update_patient(
     print(f"Updating patient with ID: {patient_id}")
 
     # Build the request payload
-    patient_data: dict[str, str | int | list[dict] | None] = {
+    body: dict[str, str | int | list[dict] | None] = {
         "patientId": patient_id,
         "birthDate": birth_date,
         "gender": gender,
@@ -417,7 +417,7 @@ def update_patient(
     response: requests.Response = requests.put(
         f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/patient/{patient_uuid}",
         headers=main_headers,
-        json=patient_data,
+        json=body,
         timeout=20,
     )
 

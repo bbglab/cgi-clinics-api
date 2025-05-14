@@ -34,12 +34,12 @@ def get_all_samples(
         If the request fails.
     """
     print(f"Fetching samples for projects: {project_uuids}")
-    params: dict = {
-        "project_uuids": ",".join(project_uuids),
-        "patient_uuids": ",".join(patient_uuids) if patient_uuids else None,
+    body: dict = {
+        "projectUuids": ",".join(project_uuids),
+        "patientUuids": ",".join(patient_uuids) if patient_uuids else None,
     }
     response: requests.Response = requests.get(
-        "https://v2.cgiclinics.eu/api/1.0/sample/full", headers=main_headers, timeout=20, params=params
+        "https://v2.cgiclinics.eu/api/1.0/sample/full", headers=main_headers, timeout=20, json=body
     )
 
     if not 200 <= response.status_code < 300:
@@ -85,9 +85,9 @@ def get_all_samples_paginated(
         If the request fails.
     """
     print(f"Fetching samples for projects: {project_uuids}")
-    params: dict = {
-        "project_uuids": ",".join(project_uuids),
-        "patient_uuids": ",".join(patient_uuids) if patient_uuids else None,
+    body: dict = {
+        "projectUuids": project_uuids,
+        "patientUuids": patient_uuids,
         "size": size,
         "page": page,
     }
@@ -95,7 +95,7 @@ def get_all_samples_paginated(
         f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/sample",
         headers=main_headers,
         timeout=20,
-        params=params,
+        json=body,
     )
 
     if not 200 <= response.status_code < 300:
@@ -237,7 +237,7 @@ def create_sample(
     print(f"Creating new sample with ID: {sample_id} for patient: {patient_uuid}")
 
     # Build the request payload
-    sample_data: dict = {
+    body: dict = {
         "patientUuid": patient_uuid,
         "sampleId": sample_id,
         "source": source,
@@ -257,7 +257,7 @@ def create_sample(
     response: requests.Response = requests.post(
         f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/sample/{sample_uuid}",
         headers=main_headers,
-        json=sample_data,
+        json=body,
         timeout=20,
     )
 
@@ -351,7 +351,7 @@ def update_sample(
     """
     print(f"Updating sample with ID: {sample_uuid} for patient: {patient_uuid}")
     # Build the request payload
-    sample_data: dict = {
+    body: dict = {
         "patientUuid": patient_uuid,
         "sampleId": sample_id,
         "source": source,
@@ -369,7 +369,7 @@ def update_sample(
     response: requests.Response = requests.put(
         f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/sample/{sample_uuid}",
         headers=main_headers,
-        json=sample_data,
+        json=body,
         timeout=20,
     )
     # Handle the response
