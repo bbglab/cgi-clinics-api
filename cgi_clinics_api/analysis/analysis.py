@@ -417,13 +417,10 @@ def create_analysis(
         "referenceGenome": reference_genome,
     }
 
-    # Upload the files if input_files is provided
-    if input_files:
-        request_body["inputFiles"] = [upload_file(project_uuid, file, main_headers) for file in input_files]
-
     # Add either input_files or input_text to the request body
     if input_files:
-        request_body["inputFiles"] = input_files
+        # Upload the files if input_files is provided
+        request_body["inputFiles"] = [upload_file(project_uuid, file, main_headers) for file in input_files]
     else:
         request_body["inputText"] = input_text
         request_body["format"] = input_format
