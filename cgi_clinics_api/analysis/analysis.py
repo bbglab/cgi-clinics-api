@@ -2,6 +2,7 @@
 This script contains a function for each of the endpoints of the CGI-Clinics API related to analyses.
 """
 
+from pathlib import Path
 from typing import Literal
 
 import requests
@@ -123,7 +124,7 @@ def get_analysis_by_uuid(project_uuid: str, analysis_uuid: str, main_headers: di
 
 
 def get_analysis_result_summary(
-    project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: str
+    project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: Path
 ) -> None:
     """Download the summary of the CGI analysis.
 
@@ -135,7 +136,7 @@ def get_analysis_result_summary(
         UUID of the analysis to get.
     main_headers : dict[str, str]
         Headers for the API request.
-    output_file : str
+    output_file : Path
         Path to the output file.
 
     Returns
@@ -159,6 +160,7 @@ def get_analysis_result_summary(
         raise requests.exceptions.HTTPError(f"Failed to get analysis summary: {response.text}")
 
     print("Analysis summary retrieved successfully")
+    output_file.parent.mkdir(parents=True, exist_ok=True)
     with open(output_file, "w", encoding="utf-8") as file:
         file.write(response.text)
     print(f"Analysis summary saved to {output_file}")
@@ -167,7 +169,7 @@ def get_analysis_result_summary(
 
 
 def get_analysis_result_mutations(
-    project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: str
+    project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: Path
 ) -> None:
     """Download the mutations results of the CGI analysis.
 
@@ -179,7 +181,7 @@ def get_analysis_result_mutations(
         UUID of the analysis to get.
     main_headers : dict[str, str]
         Headers for the API request.
-    output_file : str
+    output_file : Path
         Path to the output file.
 
     Returns
@@ -203,6 +205,7 @@ def get_analysis_result_mutations(
         raise requests.exceptions.HTTPError(f"Failed to get analysis mutations: {response.text}")
 
     print("Analysis mutations retrieved successfully")
+    output_file.parent.mkdir(parents=True, exist_ok=True)
     with open(output_file, "w", encoding="utf-8") as file:
         file.write(response.text)
     print(f"Analysis mutations saved to {output_file}")
@@ -211,7 +214,7 @@ def get_analysis_result_mutations(
 
 
 def get_analysis_result_biomarkers(
-    project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: str
+    project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: Path
 ) -> None:
     """Download the biomarkers results of the CGI analysis.
 
@@ -223,7 +226,7 @@ def get_analysis_result_biomarkers(
         UUID of the analysis to get.
     main_headers : dict[str, str]
         Headers for the API request.
-    output_file : str
+    output_file : Path
         Path to the output file.
 
     Returns
@@ -247,6 +250,7 @@ def get_analysis_result_biomarkers(
         raise requests.exceptions.HTTPError(f"Failed to get analysis biomarkers: {response.text}")
 
     print("Analysis biomarkers retrieved successfully")
+    output_file.parent.mkdir(parents=True, exist_ok=True)
     with open(output_file, "w", encoding="utf-8") as file:
         file.write(response.text)
     print(f"Analysis biomarkers saved to {output_file}")
@@ -255,7 +259,7 @@ def get_analysis_result_biomarkers(
 
 
 def get_analysis_result_cnas(
-    project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: str
+    project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: Path
 ) -> None:
     """Download the CNAs results of the CGI analysis.
 
@@ -267,7 +271,7 @@ def get_analysis_result_cnas(
         UUID of the analysis to get.
     main_headers : dict[str, str]
         Headers for the API request.
-    output_file : str
+    output_file : Path
         Path to the output file.
 
     Returns
@@ -291,6 +295,7 @@ def get_analysis_result_cnas(
         raise requests.exceptions.HTTPError(f"Failed to get analysis CNAs: {response.text}")
 
     print("Analysis CNAs retrieved successfully")
+    output_file.parent.mkdir(parents=True, exist_ok=True)
     with open(output_file, "w", encoding="utf-8") as file:
         file.write(response.text)
     print(f"Analysis CNAs saved to {output_file}")
@@ -299,7 +304,7 @@ def get_analysis_result_cnas(
 
 
 def get_analysis_result_fusions(
-    project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: str
+    project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: Path
 ) -> None:
     """Download the fusions results of the CGI analysis.
 
@@ -311,7 +316,7 @@ def get_analysis_result_fusions(
         UUID of the analysis to get.
     main_headers : dict[str, str]
         Headers for the API request.
-    output_file : str
+    output_file : Path
         Path to the output file.
 
     Returns
@@ -335,6 +340,7 @@ def get_analysis_result_fusions(
         raise requests.exceptions.HTTPError(f"Failed to get analysis fusions: {response.text}")
 
     print("Analysis fusions retrieved successfully")
+    output_file.parent.mkdir(parents=True, exist_ok=True)
     with open(output_file, "w", encoding="utf-8") as file:
         file.write(response.text)
     print(f"Analysis fusions saved to {output_file}")
@@ -353,7 +359,7 @@ def create_analysis(
     main_headers: dict[str, str],
     reference_genome: Literal["HG19", "HG38"],
     analysis_id: str,
-    input_files: list[str] | None = None,
+    input_files: list[Path] | None = None,
     input_text: str | None = None,
     input_format: str | None = None,
 ) -> dict:
@@ -663,7 +669,7 @@ def request_temporal_upload(project_uuid: str, main_headers: dict[str, str]) -> 
 
 
 def upload_file_to_temporal(
-    project_uuid: str, file_path: str, upload_request: dict, main_headers: dict[str, str]
+    project_uuid: str, file_path: Path, upload_request: dict, main_headers: dict[str, str]
 ) -> str:
     """Upload a file to a temporal project in the new CGI-Clinics Platform.
 
@@ -671,7 +677,7 @@ def upload_file_to_temporal(
     ----------
     project_uuid : str
         ID of the project in the new CGI-Clinics Platform.
-    file_path : str
+    file_path : Path
         Path to the file to be uploaded.
     upload_request : dict
         A dictionary containing the upload request information.
@@ -687,11 +693,16 @@ def upload_file_to_temporal(
     ------
     ValueError
         If the upload request is invalid.
+    FileNotFoundError
+        If the file does not exist.
     requests.exceptions.HTTPError
         If the request fails.
     """
     if "uuid" not in upload_request or "code" not in upload_request:
         raise ValueError("Invalid upload request: missing 'uuid' or 'code'")
+
+    if not file_path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
 
     upload_body: dict = {
         "type": "ANALYSIS_INPUT",
@@ -716,7 +727,7 @@ def upload_file_to_temporal(
     return upload_response.json()["uuid"]
 
 
-def upload_file(project_uuid: str, file_path: str, main_headers: dict[str, str]) -> str:
+def upload_file(project_uuid: str, file_path: Path, main_headers: dict[str, str]) -> str:
     """Upload a file to a project in the new CGI-Clinics Platform.
 
     **NOTE**: This function doesn't have a specific endpoint in the API,
@@ -726,7 +737,7 @@ def upload_file(project_uuid: str, file_path: str, main_headers: dict[str, str])
     ----------
     project_uuid : str
         ID of the project in the new CGI-Clinics Platform.
-    file_path : str
+    file_path : Path
         Path to the file to be uploaded.
     main_headers : dict[str, str]
         Headers for the API request.
@@ -735,7 +746,15 @@ def upload_file(project_uuid: str, file_path: str, main_headers: dict[str, str])
     -------
     str
         The UUID of the uploaded file.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the file does not exist.
     """
+    if not file_path.exists():
+        raise FileNotFoundError(f"File not found: {file_path}")
+
     temporal_upload_request: dict = request_temporal_upload(project_uuid, main_headers)
     upload_file_uuid: str = upload_file_to_temporal(project_uuid, file_path, temporal_upload_request, main_headers)
 
