@@ -378,9 +378,14 @@ def create_analysis(
         Reference genome to use for the analysis, either "HG19" or "HG38".
     analysis_id : str
         User-defined analysis ID.
-    input_files : list[str], optional
-        List of file UUIDs to use as input. These UUIDs are obtained from
-        the upload_file function. Cannot be used together with input_text.
+    input_files : list[Path], optional
+        List of file paths to use as input.
+        Cannot be used together with input_text.
+        NOTE: This parameter in the API requires actually the UUID of the file, not the path. However,
+        for convenience, this function has been designed to receive the input file paths and it will upload the
+        files to the CGI-Clinics Platform and get the UUIDs for you.
+        To do this, the function will call the upload_file function, which will handle the file upload.
+        The upload_file function will return the UUIDs of the uploaded files, which will be used in the API request.
     input_text : str, optional
         Mutation input text to analyze. Cannot be used together with input_files.
     input_format : str, optional
@@ -467,10 +472,10 @@ def create_direct_analysis(
     ],
     tumor_type: str,
     sequencing_type: str,
-    reference_genome: Literal["HG19", "HG38"] = "HG19",
+    reference_genome: Literal["HG19", "HG38"],
+    sequencing_germline_control: Literal["YES", "NO", "UNKNOWN"],
     sequencing_type_other: str | None = None,
-    sequencing_germline_control: Literal["YES", "NO", "UNKNOWN"] = "YES",
-    input_files: list[str] | None = None,
+    input_files: list[Path] | None = None,
     input_text: str | None = None,
     input_format: str | None = None,
 ) -> dict:
@@ -506,8 +511,8 @@ def create_direct_analysis(
         Description of sequencing type if not standard.
     sequencing_germline_control : Literal["YES", "NO", "UNKNOWN"], optional
         Whether germline control was used. Defaults to "YES".
-    input_files : list[str], optional
-        List of file UUIDs to use as input. These UUIDs are obtained from
+    input_files : list[Path] | None = None,
+        List of file paths to use as input. These paths are obtained from
         the upload_file function. Cannot be used together with input_text.
     input_text : str, optional
         Mutation input text to analyze. Cannot be used together with input_files.
@@ -558,7 +563,7 @@ def create_direct_analysis(
 
     # Handle input data
     if input_files is not None:
-        request_body["inputFiles"] = input_files
+        request_body["inputFiles"] = [upload_file(project_uuid, file_path, main_headers) for file_path in input_files]
     else:
         request_body["inputText"] = input_text
         request_body["format"] = input_format
