@@ -37,7 +37,7 @@ def get_api_token() -> str:
 if __name__ == "__main__":
     api_token: str = get_api_token()
     main_headers: dict[str, str] = {
-        "access_token": api_token,
+        "X-Api-Key": api_token,
     }
     print("CGI-Clinics API token is set.")
     print(f"Headers: {main_headers}")
