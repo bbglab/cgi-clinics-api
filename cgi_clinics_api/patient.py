@@ -54,12 +54,12 @@ def get_all_patients(
     print("Fetching all patients")
     body: dict = {
         "projectUuid": project_uuid,
-        "patient_id": patient_id,
+        "patientId": patient_id,
         "gender": gender,
-        "diagnosis_date_equals": diagnosis_date_equals,
-        "last_cgi_analysis_date_equals": last_cgi_analysis_date_equals,
-        "birth_date_before": birth_date_before,
-        "birth_date_after": birth_date_after,
+        "diagnosisDateEquals": diagnosis_date_equals,
+        "lastCgiAnalysisDateEquals": last_cgi_analysis_date_equals,
+        "birthDateBefore": birth_date_before,
+        "birthDateAfter": birth_date_after,
     }
 
     response: requests.Response = requests.get(
