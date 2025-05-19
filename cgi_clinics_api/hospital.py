@@ -8,7 +8,7 @@ import requests
 
 
 def get_all_hospitals(project_uuid: str, main_headers: dict[str, str], size: int = 10, page: int = 0) -> dict:
-    """Get all hospitals from the new CGI-Clinics Platform.
+    """Get all hospitals from the new CGI-Clinics Platform. This endpoint only works for users with superadmin role.
 
     Parameters
     ----------

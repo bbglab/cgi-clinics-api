@@ -12,7 +12,7 @@ import requests
 def get_all_samples(
     project_uuids: list[str], main_headers: dict[str, str], patient_uuids: list[str] | None = None
 ) -> dict:
-    """Get all samples from the new CGI-Clinics Platform.
+    """Get all samples from the new CGI-Clinics Platform. This endpoint only works for users with superadmin role.
 
     Parameters
     ----------

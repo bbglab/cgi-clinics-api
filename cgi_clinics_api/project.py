@@ -8,7 +8,7 @@ import requests
 
 
 def get_all_projects(main_headers: dict[str, str], name: str | None = None, size: int = 10, page: int = 0) -> dict:
-    """Get all projects from the new CGI-Clinics Platform.
+    """Get all projects from the new CGI-Clinics Platform. This endpoint only works for users with superadmin role.
 
     Parameters
     ----------

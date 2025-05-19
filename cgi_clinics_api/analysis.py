@@ -11,7 +11,7 @@ import requests
 
 
 def get_all_analyses(project_uuid: str, main_headers: dict[str, str]) -> dict:
-    """Get all analyses from the new CGI-Clinics Platform.
+    """Get all analyses from the new CGI-Clinics Platform. This endpoint only works for users with superadmin role.
 
     Parameters
     ----------

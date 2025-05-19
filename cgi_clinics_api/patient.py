@@ -20,7 +20,7 @@ def get_all_patients(
     birth_date_before: str | None = None,
     birth_date_after: str | None = None,
 ) -> dict:
-    """Get all patients from the new CGI-Clinics Platform.
+    """Get all patients from the new CGI-Clinics Platform. This endpoint only works for users with superadmin role.
 
     Parameters
     ----------

@@ -73,6 +73,27 @@ When using the functions provided by this client, it's important to understand t
 
 By examining the function signatures and their type hints, you can ensure you are passing the appropriate data in the correct format.
 
+> [!WARNING]
+> Some functions require superadmin role to work. These are all the "get all" functions:
+>
+> - `get_all_projects`
+> - `get_all_patients`
+> - `get_all_samples`
+> - `get_all_hospitals`
+> - `get_all_sequencings`
+> - `get_all_analyses`
+>
+> For regular users, you should use the paginated version of these functions instead:
+>
+> - `get_all_projects_paginated`
+> - `get_all_patients_paginated`
+> - `get_all_samples_paginated`
+> - `get_all_hospitals` (already paginated)
+> - `get_all_sequencings_paginated`
+> - `get_all_analyses_paginated`
+>
+> The paginated versions provide the same functionality but return the results in smaller chunks.
+
 ## Modules and Endpoints
 
 Below is a breakdown of each module and the API endpoints it covers.

@@ -16,7 +16,7 @@ def get_all_sequencings(
     sample_uuids: list[str] | None = None,
     patient_id: str | None = None,
 ) -> dict:
-    """Get all sequencings from the new CGI-Clinics Platform.
+    """Get all sequencings from the new CGI-Clinics Platform. This endpoint only works for users with superadmin role.
 
     Parameters
     ----------
