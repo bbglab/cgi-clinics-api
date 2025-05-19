@@ -721,7 +721,7 @@ def upload_file_to_temporal(
 
     with open(file_path, "rb") as file:
         upload_response: requests.Response = requests.post(
-            f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/temporal-upload/{upload_request['uuid']}",
+            f"https://v2.cgiclinics.eu/api/1.0/public/project/{project_uuid}/temporal-upload/{upload_request['uuid']}",
             headers=main_headers,
             timeout=20,
             data=upload_body,
