@@ -252,7 +252,7 @@ This module provides functions to interact with sequencing type-related endpoint
 >     print(f"An error occurred: {e}")
 > ```
 
-You can also straight up copy and paste the functions and use them in your scripts. The functions have been designed so that they don't use any external libraries. The only libraries used are `requests` and `typing`, which are standard in Python.
+You can also straight up copy and paste the functions and use them in your scripts. The functions have been designed so that the only external dependency is the `requests` library, which is commonly used for making HTTP requests in Python. The other library used is `pathlib`and `typing`, which are part of the Python standard library.
 
 This client aims to simplify interactions with the CGI-Clinics API for Python users.
 
