@@ -172,7 +172,7 @@ def create_project(project_name: str, main_headers: dict[str, str]) -> dict:
 # region DELETE
 
 
-def delete_project(project_uuid: str, main_headers: dict[str, str]) -> dict:
+def delete_project(project_uuid: str, main_headers: dict[str, str]) -> None:
     """Delete a project from the new CGI-Clinics Platform.
 
     Parameters
@@ -184,8 +184,8 @@ def delete_project(project_uuid: str, main_headers: dict[str, str]) -> dict:
 
     Returns
     -------
-    dict
-        A dictionary containing the project information.
+    None
+        This function doesn't return anything.
 
     Raises
     ------
@@ -200,8 +200,7 @@ def delete_project(project_uuid: str, main_headers: dict[str, str]) -> dict:
         print(f"Failed to delete project: {response.status_code} - {response.text}")
         raise requests.exceptions.HTTPError(f"Failed to delete project: {response.status_code} - {response.text}")
     print(f"Project deleted successfully: {project_uuid}")
-
-    return response.json()
+    return None
 
 
 # endregion DELETE

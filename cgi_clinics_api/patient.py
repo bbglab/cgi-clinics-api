@@ -436,7 +436,7 @@ def update_patient(
 # region DELETE
 
 
-def delete_patient(project_uuid: str, patient_uuid: str, main_headers: dict[str, str]) -> dict:
+def delete_patient(project_uuid: str, patient_uuid: str, main_headers: dict[str, str]) -> None:
     """Delete a patient from the new CGI-Clinics Platform.
 
     Parameters
@@ -450,8 +450,8 @@ def delete_patient(project_uuid: str, patient_uuid: str, main_headers: dict[str,
 
     Returns
     -------
-    dict
-        A dictionary containing the deleted patient information.
+    None
+        This function doesn't return anything.
 
     Raises
     ------
@@ -468,8 +468,7 @@ def delete_patient(project_uuid: str, patient_uuid: str, main_headers: dict[str,
         print(f"Failed to delete patient: {response.status_code} - {response.text}")
         raise requests.exceptions.HTTPError(f"Failed to delete patient: {response.status_code} - {response.text}")
     print(f"Patient deleted successfully with ID: {patient_uuid}")
-
-    return response.json()
+    return None
 
 
 # endregion DELETE
