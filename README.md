@@ -134,7 +134,6 @@ This module provides functions to interact with project-related endpoints.
 | `get_all_projects_paginated` | Retrieves all projects with pagination and optional name filtering.              |
 | `get_project_by_uuid`        | Retrieves a specific project by its UUID.                                        |
 | `create_project`             | Creates a new project.                                                           |
-| `update_project`             | Updates an existing project's information.                                       |
 | `delete_project`             | Deletes a project.                                                               |
 
 ---
