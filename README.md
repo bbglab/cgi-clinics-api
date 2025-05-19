@@ -23,6 +23,7 @@ The official CGI-Clinics API documentation can be found here:
     - [`cgi_clinics_api.sequencing-center.sequencing_center`](#cgi_clinics_apisequencing-centersequencing_center)
     - [`cgi_clinics_api.sequencing-type.sequencing_type`](#cgi_clinics_apisequencing-typesequencing_type)
   - [How to Use](#how-to-use)
+  - [Feedback](#feedback)
 
 ## Overall Structure
 
@@ -198,29 +199,58 @@ This module provides functions to interact with sequencing type-related endpoint
 
 ## How to Use
 
-1. **Set the API Token**: Ensure the `CGI_CLINICS_API_TOKEN` environment variable is set, or be prepared to enter it when prompted by the `get_api_token()` function.
+1. **Set the API Token**: Ensure the `CGI_CLINICS_API_TOKEN` environment variable is set.
 2. **Import Functions**: Import the necessary functions from the respective modules.
-3. **Call Functions**: Use the imported functions to interact with the API, passing the required parameters including the `main_headers` dictionary obtained from `headers.py`.
 
 > [!TIP]
 > Here's a quick example to get you started:
 >
 > ```python
-> from cgi_clinics_api.headers import get_api_token
-> from cgi_clinics_api.project.project import get_all_projects
+> import os
+> from pathlib import Path
+> from cgi_clinics_api.analysis import create_direct_analysis
 >
 > # Get API token and prepare headers
-> api_token = get_api_token()
+> api_token = os.getenv("CGI_CLINICS_API_TOKEN")
+> if not api_token:
+>     raise ValueError("API token not found. Please set the CGI_CLINICS_API_TOKEN environment variable.")
 > headers = {"X-Api-Key": api_token}
 >
-> # Fetch all projects
+> # Project UUID (replace with your actual project UUID)
+> project_uuid = "your-project-uuid"  # Replace with your actual project UUID
+>
+> # Define analysis parameters
+> patient_id = "PATIENT_001"
+> sample_id = "SAMPLE_001"
+> sequencing_id = "SEQ_001"
+> analysis_id = "ANALYSIS_001"
+> sample_source = "FROZEN_SPECIMEN"
+> tumor_type = "LUNG"
+> sequencing_type = "WES"
+> reference_genome = "HG38"
+>
+> # Use input files instead of text input
+> input_files = [Path("path/to/input.vcf")]  # Replace with your actual input file paths
+>
+> # Create a direct analysis
 > try:
->     projects = get_all_projects(main_headers=headers)
->     for project in projects:
->         print(f"Project Name: {project.get('name')}, Project UUID: {project.get('uuid')}")
+>     analysis_result = create_direct_analysis(
+>         project_uuid=project_uuid,
+>         main_headers=headers,
+>         patient_id=patient_id,
+>         sample_id=sample_id,
+>         sequencing_id=sequencing_id,
+>         analysis_id=analysis_id,
+>         sample_source=sample_source,
+>         tumor_type=tumor_type,
+>         sequencing_type=sequencing_type,
+>         reference_genome=reference_genome,
+>         sequencing_germline_control="YES",
+>         input_files=input_files
+>     )
+>     print(f"Analysis created: {analysis_result.get('uuid')}")
 > except Exception as e:
 >     print(f"An error occurred: {e}")
->
 > ```
 
 You can also straight up copy and paste the functions and use them in your scripts. The functions have been designed so that they don't use any external libraries. The only libraries used are `requests` and `typing`, which are standard in Python.
