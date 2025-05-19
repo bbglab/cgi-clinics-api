@@ -106,11 +106,6 @@ def get_project_by_uuid(project_uuid: str, main_headers: dict[str, str]) -> dict
     dict
         A dictionary containing the project information.
 
-    Returns
-    -------
-    dict
-        A dictionary containing the project information.
-
     Raises
     ------
     requests.exceptions.HTTPError
