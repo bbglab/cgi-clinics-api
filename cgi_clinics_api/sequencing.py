@@ -146,7 +146,7 @@ def get_sequencing_by_uuid(
     requests.exceptions.HTTPError
         If the request fails.
     """
-    print("Fetching all sequencings")
+    print("Fetching sequencing by UUID")
     response: requests.Response = requests.get(
         f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/sequencing/{sequencing_uuid}",
         headers=main_headers,
