@@ -79,7 +79,6 @@ By examining the function signatures and their type hints, you can ensure you ar
 > - `get_all_projects`
 > - `get_all_patients`
 > - `get_all_samples`
-> - `get_all_hospitals`
 > - `get_all_sequencings`
 > - `get_all_analyses`
 >
@@ -88,7 +87,6 @@ By examining the function signatures and their type hints, you can ensure you ar
 > - `get_all_projects_paginated`
 > - `get_all_patients_paginated`
 > - `get_all_samples_paginated`
-> - `get_all_hospitals` (already paginated)
 > - `get_all_sequencings_paginated`
 > - `get_all_analyses_paginated`
 >
