@@ -260,3 +260,4 @@ This client aims to simplify interactions with the CGI-Clinics API for Python us
 ## Feedback
 
 We welcome feedback! If you have suggestions for improvements or encounter any issues, please [open an issue](https://github.com/bbglab/cgi-clinics-api/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen) in this same repository.
+
