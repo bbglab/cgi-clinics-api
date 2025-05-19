@@ -108,7 +108,7 @@ def get_all_sequencings_paginated(
         "page": page,
     }
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/sequencing", headers=main_headers, timeout=20, params=params
+        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing", headers=main_headers, timeout=20, params=params
     )
     if not 200 <= response.status_code < 300:
         print(f"Failed to get sequencings (Error {response.status_code}): {response.text}")
@@ -148,7 +148,7 @@ def get_sequencing_by_uuid(
     """
     print("Fetching sequencing by UUID")
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/sequencing/{sequencing_uuid}",
+        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing/{sequencing_uuid}",
         headers=main_headers,
         timeout=20,
     )
@@ -157,7 +157,7 @@ def get_sequencing_by_uuid(
         raise requests.exceptions.HTTPError(
             f"Failed to get sequencings (Error {response.status_code}): {response.text}"
         )
-    print(f"Sequencings retrieved successfully: {len(response.json())} sequencings found")
+    print("Sequencing retrieved successfully")
 
     return response.json()
 
@@ -238,7 +238,7 @@ def create_sequencing(
 
     # Make the API request
     response: requests.Response = requests.post(
-        f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/sequencing/{sequencing_uuid}",
+        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing/{sequencing_uuid}",
         headers=main_headers,
         json=sequencing_data,
         timeout=20,
@@ -330,7 +330,7 @@ def update_sequencing(
     }
     # Make the API request
     response: requests.Response = requests.put(
-        f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/sequencing/{sequencing_uuid}",
+        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing/{sequencing_uuid}",
         headers=main_headers,
         json=sequencing_data,
         timeout=20,
@@ -356,7 +356,7 @@ def delete_sequencing(
     project_uuid: str,
     sequencing_uuid: str,
     main_headers: dict[str, str],
-) -> dict:
+) -> None:
     """Delete a sequencing from the new CGI-Clinics Platform.
 
     Parameters
@@ -370,8 +370,8 @@ def delete_sequencing(
 
     Returns
     -------
-    dict
-        A dictionary containing the sequencing information.
+    None
+        This function doesn't return anything.
 
     Raises
     ------
@@ -380,7 +380,7 @@ def delete_sequencing(
     """
     print(f"Deleting sequencing: {sequencing_uuid}")
     response: requests.Response = requests.delete(
-        f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/sequencing/{sequencing_uuid}",
+        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing/{sequencing_uuid}",
         headers=main_headers,
         timeout=20,
     )
@@ -390,8 +390,7 @@ def delete_sequencing(
             f"Failed to delete sequencing (Error {response.status_code}): {response.text}"
         )
     print(f"Sequencing deleted successfully: {sequencing_uuid}")
-
-    return response.json()
+    return None
 
 
 # endregion DELETE

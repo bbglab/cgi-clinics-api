@@ -596,7 +596,7 @@ def create_direct_analysis(
 # region DELETE
 
 
-def delete_analysis(project_uuid: str, analysis_uuid: str, main_headers: dict[str, str]) -> dict:
+def delete_analysis(project_uuid: str, analysis_uuid: str, main_headers: dict[str, str]) -> None:
     """Delete an analysis from the new CGI-Clinics Platform.
 
     Parameters
@@ -610,8 +610,8 @@ def delete_analysis(project_uuid: str, analysis_uuid: str, main_headers: dict[st
 
     Returns
     -------
-    dict
-        A dictionary containing the analysis information.
+    None
+        This function doesn't return anything.
 
     Raises
     ------
@@ -628,8 +628,7 @@ def delete_analysis(project_uuid: str, analysis_uuid: str, main_headers: dict[st
         print(f"Failed to delete analysis: {response.status_code} - {response.text}")
         raise requests.exceptions.HTTPError(f"Failed to delete analysis: {response.status_code} - {response.text}")
     print(f"Analysis deleted successfully: {analysis_uuid}")
-
-    return response.json()
+    return None
 
 
 # endregion DELETE

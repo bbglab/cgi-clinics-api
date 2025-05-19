@@ -385,7 +385,7 @@ def update_sample(
 
 
 # region DELETE
-def delete_sample(project_uuid: str, sample_uuid: str, main_headers: dict[str, str]) -> dict:
+def delete_sample(project_uuid: str, sample_uuid: str, main_headers: dict[str, str]) -> None:
     """Delete a sample from the new CGI-Clinics Platform.
 
     Parameters
@@ -399,8 +399,8 @@ def delete_sample(project_uuid: str, sample_uuid: str, main_headers: dict[str, s
 
     Returns
     -------
-    dict
-        A dictionary containing the deleted sample information.
+    None
+        This function doesn't return anything.
 
     Raises
     ------
@@ -417,10 +417,8 @@ def delete_sample(project_uuid: str, sample_uuid: str, main_headers: dict[str, s
     if not 200 <= response.status_code < 300:
         print(f"Failed to delete sample (Error {response.status_code}): {response.text}")
         raise requests.exceptions.HTTPError(f"Failed to delete sample (Error {response.status_code}): {response.text}")
-
     print(f"Sample deleted successfully: {sample_uuid}")
-
-    return response.json()
+    return None
 
 
 # endregion DELETE
