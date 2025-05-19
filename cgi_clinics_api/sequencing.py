@@ -170,8 +170,8 @@ def get_sequencing_by_uuid(
 
 def create_sequencing(
     project_uuid: str,
-    sequencing_uuid: str,
     main_headers: dict[str, str],
+    sequencing_uuid: str,
     sample_uuid: str | None = None,
     sequencing_id: str | None = None,
     sequencing_type: str | None = None,
