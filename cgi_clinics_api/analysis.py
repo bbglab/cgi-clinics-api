@@ -645,6 +645,55 @@ def rerun_analysis(
     return response.json()
 
 
+def rerun_multiple_analyses(
+    project_uuid: str,
+    analysis_uuids: list[str],
+    main_headers: dict[str, str],
+) -> dict:
+    """Rerun multiple analyses in the CGI-Clinics Platform.
+
+    This function allows you to rerun multiple analyses at once.
+
+    Parameters
+    ----------
+    project_uuid : str
+        UUID of the project to rerun the analyses in.
+    analysis_uuids : list[str]
+        List of UUIDs of the analyses to rerun.
+    main_headers : dict[str, str]
+        Headers for the API request.
+
+    Returns
+    -------
+    dict
+        A dictionary containing the rerun analyses information.
+
+    Raises
+    ------
+    requests.exceptions.HTTPError
+        If the request fails.
+    """
+    print(f"Rerunning analyses: {', '.join(analysis_uuids)}")
+
+    request_body: dict = {
+        "analysisUuids": analysis_uuids,
+    }
+
+    response: requests.Response = requests.post(
+        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/re-run",
+        headers=main_headers,
+        timeout=20,
+        json=request_body,
+    )
+
+    if not 200 <= response.status_code < 300:
+        print(f"Failed to rerun analyses: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to rerun analyses: {response.status_code} - {response.text}")
+
+    print(f"Analyses rerun successfully: {', '.join(analysis_uuids)}")
+    return response.json()
+
+
 def create_direct_analysis(
     project_uuid: str,
     main_headers: dict[str, str],
