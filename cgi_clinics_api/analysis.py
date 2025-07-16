@@ -179,6 +179,51 @@ def get_analysis_result_files(
     print(f"Analysis result files saved to {output_file}")
 
 
+def get_analysis_full_log(
+    project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: Path
+) -> None:
+    """Get the full log of the CGI analysis.
+
+    Parameters
+    ----------
+    project_uuid : str
+        UUID of the project to get the analyses from.
+    analysis_uuid : str
+        UUID of the analysis to get.
+    main_headers : dict[str, str]
+        Headers for the API request.
+    output_file : Path
+        Path to the output file.
+
+    Returns
+    -------
+    None
+        The full log of the analysis is saved to the output file.
+
+    Raises
+    ------
+    requests.exceptions.HTTPError
+        If the request fails.
+    """
+    print(f"Fetching analysis {analysis_uuid} full log")
+    response: requests.Response = requests.get(
+        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/full-log",
+        headers=main_headers,
+        timeout=20,
+    )
+    if not 200 <= response.status_code < 300:
+        print(f"Failed to get analysis full log: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(
+            f"Failed to get analysis full log: {response.status_code} - {response.text}"
+        )
+
+    print("Analysis full log retrieved successfully")
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_file, "w", encoding="utf-8") as file:
+        file.write(response.text)
+    print(f"Analysis full log saved to {output_file}")
+
+
 def get_analysis_result_summary(
     project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: Path
 ) -> None:
