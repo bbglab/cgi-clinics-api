@@ -123,6 +123,107 @@ def get_analysis_by_uuid(project_uuid: str, analysis_uuid: str, main_headers: di
     return response.json()
 
 
+def get_analysis_result_files(
+    project_uuid: str,
+    analysis_uuid: str,
+    main_headers: dict[str, str],
+    output_file: Path,
+    included_modifications: bool = False,
+) -> None:
+    """Get the result files of the CGI analysis.
+
+    Parameters
+    ----------
+    project_uuid : str
+        UUID of the project to get the analyses from.
+    analysis_uuid : str
+        UUID of the analysis to get.
+    main_headers : dict[str, str]
+        Headers for the API request.
+    output_file : Path | None
+        Path to the output file.
+    included_modifications : bool, optional
+        Whether to include modifications in the result files. Defaults to False.
+
+    Returns
+    -------
+    None
+        The result files are downloaded as a zip file.
+
+    Raises
+    ------
+    requests.exceptions.HTTPError
+        If the request fails.
+    """
+    print(f"Fetching analysis {analysis_uuid} result files")
+    params: dict = {
+        "include_modifications": included_modifications,
+    }
+    response: requests.Response = requests.get(
+        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/files",
+        headers=main_headers,
+        timeout=20,
+        params=params,
+    )
+    if not 200 <= response.status_code < 300:
+        print(f"Failed to get analysis result files: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(
+            f"Failed to get analysis result files: {response.status_code} - {response.text}"
+        )
+    print("Analysis result files retrieved successfully")
+
+    # Download the result files as a zip file
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_file, "wb") as file:
+        file.write(response.content)
+    print(f"Analysis result files saved to {output_file}")
+
+
+def get_analysis_full_log(
+    project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: Path
+) -> None:
+    """Get the full log of the CGI analysis.
+
+    Parameters
+    ----------
+    project_uuid : str
+        UUID of the project to get the analyses from.
+    analysis_uuid : str
+        UUID of the analysis to get.
+    main_headers : dict[str, str]
+        Headers for the API request.
+    output_file : Path
+        Path to the output file.
+
+    Returns
+    -------
+    None
+        The full log of the analysis is saved to the output file.
+
+    Raises
+    ------
+    requests.exceptions.HTTPError
+        If the request fails.
+    """
+    print(f"Fetching analysis {analysis_uuid} full log")
+    response: requests.Response = requests.get(
+        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/full-log",
+        headers=main_headers,
+        timeout=20,
+    )
+    if not 200 <= response.status_code < 300:
+        print(f"Failed to get analysis full log: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(
+            f"Failed to get analysis full log: {response.status_code} - {response.text}"
+        )
+
+    print("Analysis full log retrieved successfully")
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_file, "w", encoding="utf-8") as file:
+        file.write(response.text)
+    print(f"Analysis full log saved to {output_file}")
+
+
 def get_analysis_result_summary(
     project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: Path
 ) -> None:
@@ -164,6 +265,56 @@ def get_analysis_result_summary(
     with open(output_file, "w", encoding="utf-8") as file:
         file.write(response.text)
     print(f"Analysis summary saved to {output_file}")
+
+    return None
+
+
+def get_analysis_input_files(
+    project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: Path
+) -> None:
+    """Download the input files of the CGI analysis.
+
+    Parameters
+    ----------
+    project_uuid : str
+        UUID of the project to get the analyses from.
+    analysis_uuid : str
+        UUID of the analysis to get.
+    main_headers : dict[str, str]
+        Headers for the API request.
+    output_file : Path
+        Path to the output file where the input files will be saved.
+
+    Returns
+    -------
+    None
+        The input files of the analysis are saved to the output file.
+
+    Raises
+    ------
+    requests.exceptions.HTTPError
+        If the request fails.
+    """
+    print(f"Fetching analysis {analysis_uuid} input files")
+    response: requests.Response = requests.get(
+        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/input-files",
+        headers=main_headers,
+        timeout=20,
+    )
+    if not 200 <= response.status_code < 300:
+        print(f"Failed to get analysis input files: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(
+            f"Failed to get analysis input files: {response.status_code} - {response.text}"
+        )
+
+    print("Analysis input files retrieved successfully")
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+
+    # Save the zip file containing the input files
+    with open(output_file, "wb") as file:
+        file.write(response.content)
+
+    print(f"Analysis input files saved to {output_file}")
 
     return None
 
@@ -447,6 +598,99 @@ def create_analysis(
         raise requests.exceptions.HTTPError(f"Failed to create analysis: {response.status_code} - {response.text}")
 
     print(f"Analysis created successfully: {analysis_id}")
+    return response.json()
+
+
+def rerun_analysis(
+    project_uuid: str,
+    analysis_uuid: str,
+    main_headers: dict[str, str],
+) -> dict:
+    """Rerun an existing analysis in the CGI-Clinics Platform.
+
+    This function allows you to rerun an analysis that has already been created.
+
+    Parameters
+    ----------
+    project_uuid : str
+        UUID of the project to rerun the analysis in.
+    analysis_uuid : str
+        UUID of the analysis to rerun.
+    main_headers : dict[str, str]
+        Headers for the API request.
+
+    Returns
+    -------
+    dict
+        A dictionary containing the rerun analysis information.
+
+    Raises
+    ------
+    requests.exceptions.HTTPError
+        If the request fails.
+    """
+    print(f"Rerunning analysis: {analysis_uuid}")
+
+    response: requests.Response = requests.post(
+        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/re-run",
+        headers=main_headers,
+        timeout=20,
+    )
+
+    if not 200 <= response.status_code < 300:
+        print(f"Failed to rerun analysis: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to rerun analysis: {response.status_code} - {response.text}")
+
+    print(f"Analysis rerun successfully: {analysis_uuid}")
+    return response.json()
+
+
+def rerun_multiple_analyses(
+    project_uuid: str,
+    analysis_uuids: list[str],
+    main_headers: dict[str, str],
+) -> dict:
+    """Rerun multiple analyses in the CGI-Clinics Platform.
+
+    This function allows you to rerun multiple analyses at once.
+
+    Parameters
+    ----------
+    project_uuid : str
+        UUID of the project to rerun the analyses in.
+    analysis_uuids : list[str]
+        List of UUIDs of the analyses to rerun.
+    main_headers : dict[str, str]
+        Headers for the API request.
+
+    Returns
+    -------
+    dict
+        A dictionary containing the rerun analyses information.
+
+    Raises
+    ------
+    requests.exceptions.HTTPError
+        If the request fails.
+    """
+    print(f"Rerunning analyses: {', '.join(analysis_uuids)}")
+
+    request_body: dict = {
+        "analysisUuids": analysis_uuids,
+    }
+
+    response: requests.Response = requests.post(
+        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/re-run",
+        headers=main_headers,
+        timeout=20,
+        json=request_body,
+    )
+
+    if not 200 <= response.status_code < 300:
+        print(f"Failed to rerun analyses: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to rerun analyses: {response.status_code} - {response.text}")
+
+    print(f"Analyses rerun successfully: {', '.join(analysis_uuids)}")
     return response.json()
 
 
