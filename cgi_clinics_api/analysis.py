@@ -601,6 +601,50 @@ def create_analysis(
     return response.json()
 
 
+def rerun_analysis(
+    project_uuid: str,
+    analysis_uuid: str,
+    main_headers: dict[str, str],
+) -> dict:
+    """Rerun an existing analysis in the CGI-Clinics Platform.
+
+    This function allows you to rerun an analysis that has already been created.
+
+    Parameters
+    ----------
+    project_uuid : str
+        UUID of the project to rerun the analysis in.
+    analysis_uuid : str
+        UUID of the analysis to rerun.
+    main_headers : dict[str, str]
+        Headers for the API request.
+
+    Returns
+    -------
+    dict
+        A dictionary containing the rerun analysis information.
+
+    Raises
+    ------
+    requests.exceptions.HTTPError
+        If the request fails.
+    """
+    print(f"Rerunning analysis: {analysis_uuid}")
+
+    response: requests.Response = requests.post(
+        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/re-run",
+        headers=main_headers,
+        timeout=20,
+    )
+
+    if not 200 <= response.status_code < 300:
+        print(f"Failed to rerun analysis: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(f"Failed to rerun analysis: {response.status_code} - {response.text}")
+
+    print(f"Analysis rerun successfully: {analysis_uuid}")
+    return response.json()
+
+
 def create_direct_analysis(
     project_uuid: str,
     main_headers: dict[str, str],
