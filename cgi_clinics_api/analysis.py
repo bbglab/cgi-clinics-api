@@ -123,6 +123,62 @@ def get_analysis_by_uuid(project_uuid: str, analysis_uuid: str, main_headers: di
     return response.json()
 
 
+def get_analysis_result_files(
+    project_uuid: str,
+    analysis_uuid: str,
+    main_headers: dict[str, str],
+    output_file: Path,
+    included_modifications: bool = False,
+) -> None:
+    """Get the result files of the CGI analysis.
+
+    Parameters
+    ----------
+    project_uuid : str
+        UUID of the project to get the analyses from.
+    analysis_uuid : str
+        UUID of the analysis to get.
+    main_headers : dict[str, str]
+        Headers for the API request.
+    output_file : Path | None
+        Path to the output file.
+    included_modifications : bool, optional
+        Whether to include modifications in the result files. Defaults to False.
+
+    Returns
+    -------
+    None
+        The result files are downloaded as a zip file.
+
+    Raises
+    ------
+    requests.exceptions.HTTPError
+        If the request fails.
+    """
+    print(f"Fetching analysis {analysis_uuid} result files")
+    params: dict = {
+        "include_modifications": included_modifications,
+    }
+    response: requests.Response = requests.get(
+        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/files",
+        headers=main_headers,
+        timeout=20,
+        params=params,
+    )
+    if not 200 <= response.status_code < 300:
+        print(f"Failed to get analysis result files: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(
+            f"Failed to get analysis result files: {response.status_code} - {response.text}"
+        )
+    print("Analysis result files retrieved successfully")
+
+    # Download the result files as a zip file
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_file, "wb") as file:
+        file.write(response.content)
+    print(f"Analysis result files saved to {output_file}")
+
+
 def get_analysis_result_summary(
     project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: Path
 ) -> None:
