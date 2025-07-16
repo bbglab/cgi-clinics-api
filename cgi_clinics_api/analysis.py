@@ -269,6 +269,56 @@ def get_analysis_result_summary(
     return None
 
 
+def get_analysis_input_files(
+    project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_folder: Path
+) -> None:
+    """Download the input files of the CGI analysis.
+
+    Parameters
+    ----------
+    project_uuid : str
+        UUID of the project to get the analyses from.
+    analysis_uuid : str
+        UUID of the analysis to get.
+    main_headers : dict[str, str]
+        Headers for the API request.
+    output_folder : Path
+        Path to the output folder where the input files will be saved.
+
+    Returns
+    -------
+    None
+        The input files of the analysis are saved to the output folder.
+
+    Raises
+    ------
+    requests.exceptions.HTTPError
+        If the request fails.
+    """
+    print(f"Fetching analysis {analysis_uuid} input files")
+    response: requests.Response = requests.get(
+        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/input-files",
+        headers=main_headers,
+        timeout=20,
+    )
+    if not 200 <= response.status_code < 300:
+        print(f"Failed to get analysis input files: {response.status_code} - {response.text}")
+        raise requests.exceptions.HTTPError(
+            f"Failed to get analysis input files: {response.status_code} - {response.text}"
+        )
+
+    print("Analysis input files retrieved successfully")
+    output_folder.mkdir(parents=True, exist_ok=True)
+
+    # Save the zip file containing the input files
+    with open(output_folder / "input_files.zip", "wb") as file:
+        file.write(response.content)
+
+    print(f"Analysis input files saved to {output_folder}")
+
+    return None
+
+
 def get_analysis_result_mutations(
     project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: Path
 ) -> None:
