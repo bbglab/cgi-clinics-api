@@ -270,7 +270,7 @@ def get_analysis_result_summary(
 
 
 def get_analysis_input_files(
-    project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_folder: Path
+    project_uuid: str, analysis_uuid: str, main_headers: dict[str, str], output_file: Path
 ) -> None:
     """Download the input files of the CGI analysis.
 
@@ -282,13 +282,13 @@ def get_analysis_input_files(
         UUID of the analysis to get.
     main_headers : dict[str, str]
         Headers for the API request.
-    output_folder : Path
-        Path to the output folder where the input files will be saved.
+    output_file : Path
+        Path to the output file where the input files will be saved.
 
     Returns
     -------
     None
-        The input files of the analysis are saved to the output folder.
+        The input files of the analysis are saved to the output file.
 
     Raises
     ------
@@ -308,13 +308,13 @@ def get_analysis_input_files(
         )
 
     print("Analysis input files retrieved successfully")
-    output_folder.mkdir(parents=True, exist_ok=True)
+    output_file.parent.mkdir(parents=True, exist_ok=True)
 
     # Save the zip file containing the input files
-    with open(output_folder / "input_files.zip", "wb") as file:
+    with open(output_file, "wb") as file:
         file.write(response.content)
 
-    print(f"Analysis input files saved to {output_folder}")
+    print(f"Analysis input files saved to {output_file}")
 
     return None
 
