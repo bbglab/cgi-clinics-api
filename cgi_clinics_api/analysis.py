@@ -797,6 +797,9 @@ def create_direct_analysis(
     if not informed_consent and non_consent_reason is None:
         raise ValueError("If informed_consent is False, non_consent_reason must be provided")
 
+    if informed_consent and non_consent_reason is not None:
+        raise ValueError("If informed_consent is True, non_consent_reason must not be provided")
+
     # Prepare the request body
     request_body: dict = {
         "patientId": patient_id,
