@@ -722,7 +722,7 @@ def create_direct_analysis(
     sequencing_type: str,
     reference_genome: Literal["HG19", "HG38"],
     sequencing_germline_control: Literal["YES", "NO", "UNKNOWN"],
-    informed_consent: bool = False,
+    informed_consent: bool,
     sequencing_type_other: str | None = None,
     input_files: list[Path] | None = None,
     input_text: str | None = None,
