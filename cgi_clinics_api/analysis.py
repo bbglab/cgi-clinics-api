@@ -722,10 +722,12 @@ def create_direct_analysis(
     sequencing_type: str,
     reference_genome: Literal["HG19", "HG38"],
     sequencing_germline_control: Literal["YES", "NO", "UNKNOWN"],
+    informed_consent: bool,
     sequencing_type_other: str | None = None,
     input_files: list[Path] | None = None,
     input_text: str | None = None,
     input_format: str | None = None,
+    non_consent_reason: str | None = None
 ) -> dict:
     """Create a new direct analysis with additional clinical data in the CGI-Clinics Platform.
 
@@ -792,6 +794,12 @@ def create_direct_analysis(
     if input_text is not None and input_format is None:
         raise ValueError("Format must be specified when using input_text")
 
+    if not informed_consent and non_consent_reason is None:
+        raise ValueError("If informed_consent is False, non_consent_reason must be provided")
+
+    if informed_consent and non_consent_reason is not None:
+        raise ValueError("If informed_consent is True, non_consent_reason must not be provided")
+
     # Prepare the request body
     request_body: dict = {
         "patientId": patient_id,
@@ -803,6 +811,8 @@ def create_direct_analysis(
         "sequencingType": sequencing_type,
         "referenceGenome": reference_genome,
         "sequencingGermlineControl": sequencing_germline_control,
+        "informedConsent": informed_consent,
+        "nonConsentReason": non_consent_reason
     }
 
     # Add optional fields if provided
