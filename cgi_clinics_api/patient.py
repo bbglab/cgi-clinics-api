@@ -63,7 +63,7 @@ def get_all_patients(
     }
 
     response: requests.Response = requests.get(
-        "https://v2.cgiclinics.eu/api/1.0/patient/full", headers=main_headers, timeout=20, json=body
+        "https://platform.cgiclinics.eu/api/1.0/patient/full", headers=main_headers, timeout=20, json=body
     )
     if not 200 <= response.status_code < 300:
         print(f"Failed to get patients: {response.status_code} - {response.text}")
@@ -130,7 +130,7 @@ def get_all_patients_paginated(
     }
 
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/patient", headers=main_headers, timeout=20, json=body
+        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/patient", headers=main_headers, timeout=20, json=body
     )
     if not 200 <= response.status_code < 300:
         print(f"Failed to get patients: {response.status_code} - {response.text}")
@@ -168,7 +168,7 @@ def get_patient_by_uuid(
     """
     print("Fetching patient")
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/patient/{patient_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/patient/{patient_uuid}",
         headers=main_headers,
         timeout=20,
     )
@@ -289,7 +289,7 @@ def create_patient(
 
     # Make the API request
     response: requests.Response = requests.post(
-        f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/patient/{patient_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/patient/{patient_uuid}",
         headers=main_headers,
         json=body,
         timeout=20,
@@ -415,7 +415,7 @@ def update_patient(
 
     # Make the API request
     response: requests.Response = requests.put(
-        f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/patient/{patient_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/patient/{patient_uuid}",
         headers=main_headers,
         json=body,
         timeout=20,
@@ -460,7 +460,7 @@ def delete_patient(project_uuid: str, patient_uuid: str, main_headers: dict[str,
     """
     print(f"Deleting patient with ID: {patient_uuid}")
     response: requests.Response = requests.delete(
-        f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/patient/{patient_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/patient/{patient_uuid}",
         headers=main_headers,
         timeout=20,
     )

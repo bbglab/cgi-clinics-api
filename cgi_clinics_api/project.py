@@ -38,7 +38,7 @@ def get_all_projects(main_headers: dict[str, str], name: str | None = None, size
         "page": page,
     }
     response: requests.Response = requests.get(
-        "https://v2.cgiclinics.eu/api/1.0/project/full", headers=main_headers, timeout=20, params=params
+        "https://platform.cgiclinics.eu/api/1.0/project/full", headers=main_headers, timeout=20, params=params
     )
     if not 200 <= response.status_code < 300:
         print(f"Failed to get projects: {response.status_code} - {response.text}")
@@ -81,7 +81,7 @@ def get_all_projects_paginated(
         "page": page,
     }
     response: requests.Response = requests.get(
-        "https://v2.cgiclinics.eu/api/1.0/project", headers=main_headers, timeout=20, params=params
+        "https://platform.cgiclinics.eu/api/1.0/project", headers=main_headers, timeout=20, params=params
     )
     if not 200 <= response.status_code < 300:
         print(f"Failed to get projects: {response.status_code} - {response.text}")
@@ -113,7 +113,7 @@ def get_project_by_uuid(project_uuid: str, main_headers: dict[str, str]) -> dict
     """
     print(f"Fetching project: {project_uuid}")
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}", headers=main_headers, timeout=20
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}", headers=main_headers, timeout=20
     )
 
     if not 200 <= response.status_code < 300:
@@ -156,7 +156,7 @@ def create_project(project_name: str, main_headers: dict[str, str]) -> dict:
         "name": project_name,
     }
     response: requests.Response = requests.post(
-        "https://v2.cgiclinics.eu/api/1.0/project", headers=main_headers, timeout=20, json=params
+        "https://platform.cgiclinics.eu/api/1.0/project", headers=main_headers, timeout=20, json=params
     )
     if not 200 <= response.status_code < 300:
         print(f"Failed to create project: {response.status_code} - {response.text}")
@@ -194,7 +194,7 @@ def delete_project(project_uuid: str, main_headers: dict[str, str]) -> None:
     """
     print(f"Deleting project: {project_uuid}")
     response: requests.Response = requests.delete(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}", headers=main_headers, timeout=20
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}", headers=main_headers, timeout=20
     )
     if not 200 <= response.status_code < 300:
         print(f"Failed to delete project: {response.status_code} - {response.text}")

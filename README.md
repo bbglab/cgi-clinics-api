@@ -4,7 +4,7 @@ This repository provides a Python client for interacting with the CGI-Clinics AP
 
 The official CGI-Clinics API documentation can be found here:
 
--   [CGI-Clinics API Documentation](https://v2.cgiclinics.eu/api/swagger-ui/index.html)
+-   [CGI-Clinics API Documentation](https://platform.cgiclinics.eu/api/swagger-ui/index.html)
 
 ## Index
 

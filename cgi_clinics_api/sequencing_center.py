@@ -29,7 +29,7 @@ def get_all_sequencing_centers(project_uuid: str, main_headers: dict[str, str]) 
     """
     print("Fetching all sequencing centers")
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-center/full",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-center/full",
         headers=main_headers,
         timeout=20,
     )
@@ -76,7 +76,7 @@ def get_all_sequencing_centers_paginated(
     }
 
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-center",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-center",
         headers=main_headers,
         timeout=20,
         params=params,
@@ -125,7 +125,7 @@ def create_sequencing_center(project_uuid: str, main_headers: dict[str, str], se
     }
 
     response: requests.Response = requests.post(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-center",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-center",
         headers=main_headers,
         timeout=20,
         json=data,
@@ -181,7 +181,7 @@ def update_sequencing_center(
     }
 
     response: requests.Response = requests.put(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-center/{sequencing_center_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-center/{sequencing_center_uuid}",
         headers=main_headers,
         timeout=20,
         json=data,
@@ -221,7 +221,7 @@ def delete_sequencing_center(project_uuid: str, sequencing_center_uuid: str, mai
     """
     print("Deleting a sequencing center")
     response: requests.Response = requests.delete(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-center/{sequencing_center_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-center/{sequencing_center_uuid}",
         headers=main_headers,
         timeout=20,
     )
