@@ -29,7 +29,7 @@ def get_all_sequencing_types(project_uuid: str, main_headers: dict[str, str]) ->
     """
     print("Fetching all sequencing types")
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type/full",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type/full",
         headers=main_headers,
         timeout=20,
     )
@@ -75,7 +75,7 @@ def get_all_sequencing_types_paginated(
         "page": page,
     }
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type/",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type/",
         headers=main_headers,
         params=params,
         timeout=20,
@@ -123,7 +123,7 @@ def create_sequencing_type(project_uuid: str, main_headers: dict[str, str], sequ
         "name": sequencing_type_name,
     }
     response: requests.Response = requests.post(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type/",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type/",
         headers=main_headers,
         json=data,
         timeout=20,
@@ -178,7 +178,7 @@ def update_sequencing_type(
         "name": sequencing_type_name,
     }
     response: requests.Response = requests.put(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type/{sequencing_type_id}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type/{sequencing_type_id}",
         headers=main_headers,
         json=data,
         timeout=20,
@@ -218,7 +218,7 @@ def delete_sequencing_type(project_uuid: str, sequencing_type_id: str, main_head
     """
     print("Deleting a sequencing type")
     response: requests.Response = requests.delete(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type/{sequencing_type_id}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type/{sequencing_type_id}",
         headers=main_headers,
         timeout=20,
     )

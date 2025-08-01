@@ -39,7 +39,7 @@ def get_all_samples(
         "patientUuids": ",".join(patient_uuids) if patient_uuids else None,
     }
     response: requests.Response = requests.get(
-        "https://v2.cgiclinics.eu/api/1.0/sample/full", headers=main_headers, timeout=20, json=body
+        "https://platform.cgiclinics.eu/api/1.0/sample/full", headers=main_headers, timeout=20, json=body
     )
 
     if not 200 <= response.status_code < 300:
@@ -92,7 +92,7 @@ def get_all_samples_paginated(
         "page": page,
     }
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/sample",
+        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/sample",
         headers=main_headers,
         timeout=20,
         json=body,
@@ -131,7 +131,7 @@ def get_sample_by_uuid(project_uuid: str, sample_uuid: str, main_headers: dict[s
     """
     print(f"Fetching sample {sample_uuid} for project {project_uuid}")
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/sample/{sample_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/sample/{sample_uuid}",
         headers=main_headers,
         timeout=20,
     )
@@ -255,7 +255,7 @@ def create_sample(
 
     # Make the API request
     response: requests.Response = requests.post(
-        f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/sample/{sample_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/sample/{sample_uuid}",
         headers=main_headers,
         json=body,
         timeout=20,
@@ -367,7 +367,7 @@ def update_sample(
     }
     # Make the API request
     response: requests.Response = requests.put(
-        f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/sample/{sample_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/sample/{sample_uuid}",
         headers=main_headers,
         json=body,
         timeout=20,
@@ -409,7 +409,7 @@ def delete_sample(project_uuid: str, sample_uuid: str, main_headers: dict[str, s
     """
     print(f"Deleting sample {sample_uuid} for project {project_uuid}")
     response: requests.Response = requests.delete(
-        f"https://v2.cgiclinics.eu/api/1.0/{project_uuid}/sample/{sample_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/sample/{sample_uuid}",
         headers=main_headers,
         timeout=20,
     )

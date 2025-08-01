@@ -32,7 +32,7 @@ def get_all_analyses(project_uuid: str, main_headers: dict[str, str]) -> dict:
     """
     print("Fetching all analyses")
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/full",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/full",
         headers=main_headers,
         timeout=20,
     )
@@ -74,7 +74,7 @@ def get_all_analyses_paginated(project_uuid: str, main_headers: dict[str, str], 
         "page": page,
     }
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/",
         headers=main_headers,
         timeout=20,
         params=params,
@@ -111,7 +111,7 @@ def get_analysis_by_uuid(project_uuid: str, analysis_uuid: str, main_headers: di
     """
     print(f"Fetching analysis {analysis_uuid}")
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}",
         headers=main_headers,
         timeout=20,
     )
@@ -160,7 +160,7 @@ def get_analysis_result_files(
         "include_modifications": included_modifications,
     }
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/files",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/files",
         headers=main_headers,
         timeout=20,
         params=params,
@@ -207,7 +207,7 @@ def get_analysis_full_log(
     """
     print(f"Fetching analysis {analysis_uuid} full log")
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/full-log",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/full-log",
         headers=main_headers,
         timeout=20,
     )
@@ -252,7 +252,7 @@ def get_analysis_result_summary(
     """
     print(f"Fetching analysis {analysis_uuid} summary")
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/result/summary",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/result/summary",
         headers=main_headers,
         timeout=20,
     )
@@ -297,7 +297,7 @@ def get_analysis_input_files(
     """
     print(f"Fetching analysis {analysis_uuid} input files")
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/input-files",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/input-files",
         headers=main_headers,
         timeout=20,
     )
@@ -347,7 +347,7 @@ def get_analysis_result_mutations(
     """
     print(f"Fetching analysis {analysis_uuid} mutations")
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/result/mutations",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/result/mutations",
         headers=main_headers,
         timeout=20,
     )
@@ -394,7 +394,7 @@ def get_analysis_result_biomarkers(
     """
     print(f"Fetching analysis {analysis_uuid} biomarkers")
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/result/biomarkers",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/result/biomarkers",
         headers=main_headers,
         timeout=20,
     )
@@ -441,7 +441,7 @@ def get_analysis_result_cnas(
     """
     print(f"Fetching analysis {analysis_uuid} CNAs")
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/result/cnas",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/result/cnas",
         headers=main_headers,
         timeout=20,
     )
@@ -486,7 +486,7 @@ def get_analysis_result_fusions(
     """
     print(f"Fetching analysis {analysis_uuid} fusions")
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/result/fusions",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/result/fusions",
         headers=main_headers,
         timeout=20,
     )
@@ -587,7 +587,7 @@ def create_analysis(
 
     # Make the API call
     response: requests.Response = requests.post(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis",
         headers=main_headers,
         timeout=20,
         json=request_body,
@@ -632,7 +632,7 @@ def rerun_analysis(
     print(f"Rerunning analysis: {analysis_uuid}")
 
     response: requests.Response = requests.post(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/re-run",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}/re-run",
         headers=main_headers,
         timeout=20,
     )
@@ -680,7 +680,7 @@ def rerun_multiple_analyses(
     }
 
     response: requests.Response = requests.post(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/re-run",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/re-run",
         headers=main_headers,
         timeout=20,
         json=request_body,
@@ -828,7 +828,7 @@ def create_direct_analysis(
 
     # Make the API call
     response: requests.Response = requests.post(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/direct-analysis",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/direct-analysis",
         headers=main_headers,
         timeout=20,
         json=request_body,
@@ -874,7 +874,7 @@ def delete_analysis(project_uuid: str, analysis_uuid: str, main_headers: dict[st
     """
     print(f"Deleting analysis: {analysis_uuid}")
     response: requests.Response = requests.delete(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/{analysis_uuid}",
         headers=main_headers,
         timeout=20,
     )
@@ -915,7 +915,7 @@ def request_temporal_upload(project_uuid: str, main_headers: dict[str, str]) -> 
         "type": "ANALYSIS_INPUT",
     }
     temporal_response: requests.Response = requests.post(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/temporal-upload",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/temporal-upload",
         headers=main_headers,
         timeout=20,
         json=upload_request_body,
@@ -974,7 +974,7 @@ def upload_file_to_temporal(
 
     with open(file_path, "rb") as file:
         upload_response: requests.Response = requests.post(
-            f"https://v2.cgiclinics.eu/api/1.0/public/project/{project_uuid}/temporal-upload/{upload_request['uuid']}",
+            f"https://platform.cgiclinics.eu/api/1.0/public/project/{project_uuid}/temporal-upload/{upload_request['uuid']}",
             headers=main_headers,
             timeout=20,
             data=upload_body,

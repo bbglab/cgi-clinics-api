@@ -38,7 +38,7 @@ def get_all_hospitals(project_uuid: str, main_headers: dict[str, str], size: int
     }
 
     response: requests.Response = requests.get(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/hospital",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/hospital",
         headers=main_headers,
         timeout=20,
         params=params,
@@ -84,7 +84,7 @@ def create_hospital(project_uuid: str, main_headers: dict[str, str], name: str) 
         "name": name,
     }
     response: requests.Response = requests.post(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/hospital", headers=main_headers, timeout=20, json=data
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/hospital", headers=main_headers, timeout=20, json=data
     )
     if not 200 <= response.status_code < 300:
         print(f"Failed to create hospital: {response.status_code} - {response.text}")
@@ -127,7 +127,7 @@ def update_hospital(project_uuid: str, hospital_uuid: str, main_headers: dict[st
         "name": hospital_name,
     }
     response: requests.Response = requests.put(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/hospital/{hospital_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/hospital/{hospital_uuid}",
         headers=main_headers,
         timeout=20,
         json=data,
@@ -165,7 +165,7 @@ def delete_hospital(project_uuid: str, hospital_uuid: str, main_headers: dict[st
     """
     print(f"Deleting hospital {hospital_uuid}")
     response: requests.Response = requests.delete(
-        f"https://v2.cgiclinics.eu/api/1.0/project/{project_uuid}/hospital/{hospital_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/hospital/{hospital_uuid}",
         headers=main_headers,
         timeout=20,
     )
