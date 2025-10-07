@@ -111,6 +111,8 @@ def update_hospital(project_uuid: str, hospital_uuid: str, main_headers: dict[st
         UUID of the hospital to update.
     main_headers : dict[str, str]
         Headers for the API request.
+    hospital_name : str
+        New name for the hospital.
 
     Returns
     -------

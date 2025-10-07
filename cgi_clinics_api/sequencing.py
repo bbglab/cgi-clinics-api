@@ -171,7 +171,6 @@ def get_sequencing_by_uuid(
 def create_sequencing(
     project_uuid: str,
     main_headers: dict[str, str],
-    sequencing_uuid: str,
     sample_uuid: str | None = None,
     sequencing_id: str | None = None,
     sequencing_type: str | None = None,
@@ -188,17 +187,15 @@ def create_sequencing(
     ----------
     project_uuid : str
         UUID of the project where the sequencing will be created.
-    sequencing_uuid : str
-        UUID to assign to the new sequencing.
     main_headers : dict[str, str]
         Headers to include in the API request.
     sample_uuid : str | None, optional
         UUID of the sample associated with this sequencing.
     sequencing_id : str | None, optional
         Identifier for the sequencing, by default None.
-    type : str | None, optional
+    sequencing_type : str | None, optional
         Type of sequencing performed, by default None.
-    type_other : str | None, optional
+    sequencing_type_other : str | None, optional
         Additional type information if the standard types don't apply, by default None.
     center : str | None, optional
         Center where the sequencing was performed, by default None.
@@ -238,7 +235,7 @@ def create_sequencing(
 
     # Make the API request
     response: requests.Response = requests.post(
-        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing/{sequencing_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing",
         headers=main_headers,
         json=sequencing_data,
         timeout=20,

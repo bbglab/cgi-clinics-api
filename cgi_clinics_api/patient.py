@@ -63,7 +63,7 @@ def get_all_patients(
     }
 
     response: requests.Response = requests.get(
-        "https://platform.cgiclinics.eu/api/1.0/patient/full", headers=main_headers, timeout=20, json=body
+        "https://platform.cgiclinics.eu/api/1.0/patient/full", headers=main_headers, timeout=20, params=body
     )
     if not 200 <= response.status_code < 300:
         print(f"Failed to get patients: {response.status_code} - {response.text}")
@@ -130,7 +130,7 @@ def get_all_patients_paginated(
     }
 
     response: requests.Response = requests.get(
-        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/patient", headers=main_headers, timeout=20, json=body
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/patient", headers=main_headers, timeout=20, params=body
     )
     if not 200 <= response.status_code < 300:
         print(f"Failed to get patients: {response.status_code} - {response.text}")
@@ -168,7 +168,7 @@ def get_patient_by_uuid(
     """
     print("Fetching patient")
     response: requests.Response = requests.get(
-        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/patient/{patient_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/patient/{patient_uuid}",
         headers=main_headers,
         timeout=20,
     )
@@ -188,7 +188,6 @@ def get_patient_by_uuid(
 
 def create_patient(
     project_uuid: str,
-    patient_uuid: str,
     main_headers: dict[str, str],
     patient_id: str | None = None,
     birth_date: str | None = None,
@@ -206,6 +205,8 @@ def create_patient(
     germline_alterations: list[dict] | None = None,
     other_molecular_analysis: list[dict] | None = None,
     family_cancers: list[dict] | None = None,
+    informed_consent: bool | None = None,
+    non_consent_reason: str | None = None,
 ) -> dict:
     """Create a new patient in the CGI-Clinics Platform.
 
@@ -254,6 +255,10 @@ def create_patient(
     family_cancers : list[dict] | None = None
         List of family cancers with schema:
         [{"topographyCode": str, "parentage": str}]
+    informed_consent : bool | None = None
+        Whether informed consent was obtained, by default None.
+    non_consent_reason : str | None = None
+        Reason for non-consent if informed_consent is False, by default None.
 
     Returns
     -------
@@ -285,11 +290,13 @@ def create_patient(
         "germlineAlterations": germline_alterations,
         "otherMolecularAnalysis": other_molecular_analysis,
         "familyCancers": family_cancers,
+        "informedConsent": informed_consent,
+        "nonConsentReason": non_consent_reason,
     }
 
     # Make the API request
     response: requests.Response = requests.post(
-        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/patient/{patient_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/patient",
         headers=main_headers,
         json=body,
         timeout=20,
@@ -330,6 +337,8 @@ def update_patient(
     germline_alterations: list[dict] | None = None,
     other_molecular_analysis: list[dict] | None = None,
     family_cancers: list[dict] | None = None,
+    informed_consent: bool | None = None,
+    non_consent_reason: str | None = None,
 ) -> dict:
     """Update an existing patient in the CGI-Clinics Platform.
 
@@ -411,11 +420,13 @@ def update_patient(
         "germlineAlterations": germline_alterations,
         "otherMolecularAnalysis": other_molecular_analysis,
         "familyCancers": family_cancers,
+        "informedConsent": informed_consent,
+        "nonConsentReason": non_consent_reason,
     }
 
     # Make the API request
     response: requests.Response = requests.put(
-        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/patient/{patient_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/patient/{patient_uuid}",
         headers=main_headers,
         json=body,
         timeout=20,
@@ -460,7 +471,7 @@ def delete_patient(project_uuid: str, patient_uuid: str, main_headers: dict[str,
     """
     print(f"Deleting patient with ID: {patient_uuid}")
     response: requests.Response = requests.delete(
-        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/patient/{patient_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/patient/{patient_uuid}",
         headers=main_headers,
         timeout=20,
     )

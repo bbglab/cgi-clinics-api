@@ -74,7 +74,7 @@ def get_all_analyses_paginated(project_uuid: str, main_headers: dict[str, str], 
         "page": page,
     }
     response: requests.Response = requests.get(
-        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis",
         headers=main_headers,
         timeout=20,
         params=params,
@@ -512,6 +512,7 @@ def get_analysis_result_fusions(
 def create_analysis(
     project_uuid: str,
     main_headers: dict[str, str],
+    sequencing_uuid: str,
     reference_genome: Literal["HG19", "HG38"],
     analysis_id: str,
     input_files: list[Path] | None = None,
@@ -573,6 +574,7 @@ def create_analysis(
 
     # Prepare the request body
     request_body: dict = {
+        "sequencingUuid": sequencing_uuid,
         "analysisId": analysis_id,
         "referenceGenome": reference_genome,
     }

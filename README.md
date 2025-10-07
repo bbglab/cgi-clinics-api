@@ -32,14 +32,14 @@ The client is organized into modules, each corresponding to a major resource in 
 -   **`cgi_clinics_api/`**: The main package directory.
     -   **`__init__.py`**: Initializes the Python package.
     -   **`headers.py`**: Handles API authentication.
-    -   **`analysis/`**: Contains functions for analysis-related endpoints.
-    -   **`hospital/`**: Contains functions for hospital-related endpoints.
-    -   **`patient/`**: Contains functions for patient-related endpoints.
-    -   **`project/`**: Contains functions for project-related endpoints.
-    -   **`sample/`**: Contains functions for sample-related endpoints.
-    -   **`sequencing/`**: Contains functions for sequencing-related endpoints.
-    -   **`sequencing-center/`**: Contains functions for sequencing center-related endpoints.
-    -   **`sequencing-type/`**: Contains functions for sequencing type-related endpoints.
+    -   **`analysis.py`**: Contains functions for analysis-related endpoints.
+    -   **`hospital.py`**: Contains functions for hospital-related endpoints.
+    -   **`patient.py`**: Contains functions for patient-related endpoints.
+    -   **`project.py`**: Contains functions for project-related endpoints.
+    -   **`sample.py`**: Contains functions for sample-related endpoints.
+    -   **`sequencing.py`**: Contains functions for sequencing-related endpoints.
+    -   **`sequencing_center.py`**: Contains functions for sequencing center-related endpoints.
+    -   **`sequencing_type.py`**: Contains functions for sequencing type-related endpoints.
 
 ## Authentication
 

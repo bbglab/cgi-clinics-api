@@ -75,7 +75,7 @@ def get_all_sequencing_types_paginated(
         "page": page,
     }
     response: requests.Response = requests.get(
-        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type/",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type",
         headers=main_headers,
         params=params,
         timeout=20,
@@ -123,7 +123,7 @@ def create_sequencing_type(project_uuid: str, main_headers: dict[str, str], sequ
         "name": sequencing_type_name,
     }
     response: requests.Response = requests.post(
-        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type/",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type",
         headers=main_headers,
         json=data,
         timeout=20,
