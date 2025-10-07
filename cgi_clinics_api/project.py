@@ -17,7 +17,7 @@ def get_all_projects(main_headers: dict[str, str], name: str | None = None, size
     name : str | None, optional
         Name of the project to filter by, by default None
     size : int
-        Number of projects to retrieve per page.
+        Number of projects to retrieve per page. Maximum value is 2000.
     page : int
         Page number to retrieve.
 
@@ -28,9 +28,14 @@ def get_all_projects(main_headers: dict[str, str], name: str | None = None, size
 
     Raises
     ------
+    ValueError
+        If size is greater than 2000.
     requests.exceptions.HTTPError
         If the request fails.
     """
+    if size > 2000:
+        raise ValueError("Due to API limitations, the maximum size per page is 2000")
+
     print("Fetching all projects")
     params: dict = {
         "name": name,
@@ -60,7 +65,7 @@ def get_all_projects_paginated(
     name : str | None, optional
         Name of the project to filter by, by default None
     size : int
-        Number of projects to retrieve per page.
+        Number of projects to retrieve per page. Maximum value is 2000.
     page : int
         Page number to retrieve.
 
@@ -71,9 +76,14 @@ def get_all_projects_paginated(
 
     Raises
     ------
+    ValueError
+        If size is greater than 2000.
     requests.exceptions.HTTPError
         If the request fails.
     """
+    if size > 2000:
+        raise ValueError("Due to API limitations, the maximum size per page is 2000")
+
     print("Fetching all projects")
     params: dict = {
         "name": name,

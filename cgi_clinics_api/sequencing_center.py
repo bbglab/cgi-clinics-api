@@ -55,7 +55,7 @@ def get_all_sequencing_centers_paginated(
     main_headers : dict[str, str]
         Headers for the API request.
     size : int, optional
-        Number of sequencing centers to retrieve per page, by default 10
+        Number of sequencing centers to retrieve per page. Maximum value is 2000, by default 10
     page : int, optional
         Page number to retrieve, by default 0
 
@@ -66,9 +66,14 @@ def get_all_sequencing_centers_paginated(
 
     Raises
     ------
+    ValueError
+        If size is greater than 2000.
     requests.exceptions.HTTPError
         If the request fails.
     """
+    if size > 2000:
+        raise ValueError("Due to API limitations, the maximum size per page is 2000")
+
     print("Fetching all sequencing centers")
     params: dict[str, int] = {
         "size": size,

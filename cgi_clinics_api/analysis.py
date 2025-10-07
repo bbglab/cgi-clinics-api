@@ -54,7 +54,7 @@ def get_all_analyses_paginated(project_uuid: str, main_headers: dict[str, str], 
     main_headers : dict[str, str]
         Headers for the API request.
     size : int
-        Number of analyses to retrieve per page.
+        Number of analyses to retrieve per page. Maximum value is 2000.
     page : int
         Page number to retrieve.
 
@@ -65,9 +65,14 @@ def get_all_analyses_paginated(project_uuid: str, main_headers: dict[str, str], 
 
     Raises
     ------
+    ValueError
+        If size is greater than 2000.
     requests.exceptions.HTTPError
         If the request fails.
     """
+    if size > 2000:
+        raise ValueError("Due to API limitations, the maximum size per page is 2000")
+
     print(f"Fetching all analyses (paginated) for page {page} with size {size}")
     params: dict = {
         "size": size,

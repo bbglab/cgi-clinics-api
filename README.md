@@ -74,6 +74,50 @@ When using the functions provided by this client, it's important to understand t
 
 By examining the function signatures and their type hints, you can ensure you are passing the appropriate data in the correct format.
 
+## Pagination Limits
+
+Many functions in this client provide pagination capabilities to retrieve large datasets in manageable chunks. Please note the following important limitation:
+
+> [!WARNING]
+> **Maximum Page Size Limit**: Due to API limitations, the maximum number of items that can be retrieved per page is **2000**. If you attempt to set the `size` parameter to a value greater than 2000, the function will raise a `ValueError` with the message: "Due to API limitations, the maximum size per page is 2000".
+
+This limit applies to all paginated functions, including:
+
+- `get_all_projects()`
+- `get_all_projects_paginated()`
+- `get_all_analyses_paginated()`
+- `get_all_hospitals()`
+- `get_all_patients_paginated()`
+- `get_all_samples_paginated()`
+- `get_all_sequencings_paginated()`
+- `get_all_sequencing_centers_paginated()`
+- `get_all_sequencing_types_paginated()`
+
+If you need to retrieve more than 2000 items, use multiple requests with different page numbers:
+
+```python
+# Example: Retrieve all projects when there are more than 2000
+all_projects = []
+page = 0
+page_size = 2000  # Maximum allowed
+
+while True:
+    projects_response = get_all_projects_paginated(
+        main_headers=headers,
+        size=page_size,
+        page=page
+    )
+
+    projects = projects_response.get("records", [])
+    all_projects.extend(projects)
+
+    # Check if there are more pages
+    if len(projects) < page_size:
+        break  # No more data
+
+    page += 1
+```
+
 ## Modules and Endpoints
 
 Below is a breakdown of each module and the API endpoints it covers.

@@ -85,7 +85,7 @@ def get_all_sequencings_paginated(
     sample_uuids : list[str] | None, optional
         List of sample UUIDs to filter by, by default None
     size : int
-        Number of sequencings to retrieve per page.
+        Number of sequencings to retrieve per page. Maximum value is 2000.
     page : int
         Page number to retrieve.
 
@@ -96,9 +96,14 @@ def get_all_sequencings_paginated(
 
     Raises
     ------
+    ValueError
+        If size is greater than 2000.
     requests.exceptions.HTTPError
         If the request fails.
     """
+    if size > 2000:
+        raise ValueError("Due to API limitations, the maximum size per page is 2000")
+
     print("Fetching all sequencings")
     params: dict = {
         "projectUuids": project_uuids,

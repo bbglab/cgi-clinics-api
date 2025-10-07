@@ -69,7 +69,7 @@ def get_all_samples_paginated(
     patient_uuid : str | None, optional
         Patient UUID to filter by, by default None
     size : int
-        Number of samples to retrieve per page.
+        Number of samples to retrieve per page. Maximum value is 2000.
     page : int
         Page number to retrieve.
 
@@ -80,9 +80,14 @@ def get_all_samples_paginated(
 
     Raises
     ------
+    ValueError
+        If size is greater than 2000.
     requests.exceptions.HTTPError
         If the request fails.
     """
+    if size > 2000:
+        raise ValueError("Due to API limitations, the maximum size per page is 2000")
+
     print(f"Fetching samples for project: {project_uuid}")
     body: dict = {
         "projectUuid": project_uuid,
