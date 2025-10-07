@@ -220,7 +220,7 @@ def create_sample(
         Date when sample was taken (format YYYY-MM-DD), by default None.
     biomarkers : list[dict] | None, optional
         List of biomarkers with schema:
-        [{"code": str, "codeOther": Literal["PDL1_VALUE","PDL1_EXPRESSION","MSI_H","DMMR","TMB","ER","PR","HER2","OTHER"], "value": str, "unit": str}]
+        [{"code": str, "codeOther": "PDL1_VALUE" | "PDL1_EXPRESSION" | "MSI_H" | "DMMR" | "TMB" | "ER" | "PR" | "HER2" | "OTHER", "value": str, "unit": str}]
     informed_consent : bool | None, optional
         Whether informed consent was obtained, by default None.
     non_consent_reason : str | None, optional
@@ -354,7 +354,7 @@ def update_sample(
         Date when sample was taken (format YYYY-MM-DD), by default None.
     biomarkers : list[dict] | None, optional
         List of biomarkers with schema:
-        [{"code": str, "codeOther": Literal["PDL1_VALUE","PDL1_EXPRESSION","MSI_H","DMMR","TMB","ER","PR","HER2","OTHER"], "value": str, "unit": str}]
+        [{"code": str, "codeOther": "PDL1_VALUE" | "PDL1_EXPRESSION" | "MSI_H" | "DMMR" | "TMB" | "ER" | "PR" | "HER2" | "OTHER", "value": str, "unit": str}]
     """
     print(f"Updating sample with ID: {sample_uuid} for patient: {patient_uuid}")
     # Build the request payload
