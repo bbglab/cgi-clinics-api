@@ -56,7 +56,7 @@ def get_all_sequencings(
         raise requests.exceptions.HTTPError(
             f"Failed to get sequencings (Error {response.status_code}): {response.text}"
         )
-    print(f"Sequencings retrieved successfully: {len(response.json())} sequencings found")
+    print(f"Sequencings retrieved successfully: {len(response.json()["records"])} sequencings found")
 
     return response.json()
 
@@ -115,7 +115,7 @@ def get_all_sequencings_paginated(
         raise requests.exceptions.HTTPError(
             f"Failed to get sequencings (Error {response.status_code}): {response.text}"
         )
-    print(f"Sequencings retrieved successfully: {len(response.json())} sequencings found")
+    print(f"Sequencings retrieved successfully: {len(response.json()["records"])} sequencings found")
 
     return response.json()
 

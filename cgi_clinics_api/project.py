@@ -43,7 +43,7 @@ def get_all_projects(main_headers: dict[str, str], name: str | None = None, size
     if not 200 <= response.status_code < 300:
         print(f"Failed to get projects: {response.status_code} - {response.text}")
         raise requests.exceptions.HTTPError(f"Failed to get projects: {response.status_code} - {response.text}")
-    print(f"Projects retrieved successfully: {len(response.json())} projects found")
+    print(f"Projects retrieved successfully: {len(response.json()["records"])} projects found")
 
     return response.json()
 
@@ -86,7 +86,7 @@ def get_all_projects_paginated(
     if not 200 <= response.status_code < 300:
         print(f"Failed to get projects: {response.status_code} - {response.text}")
         raise requests.exceptions.HTTPError(f"Failed to get projects: {response.status_code} - {response.text}")
-    print(f"Projects retrieved successfully: {len(response.json())} projects found")
+    print(f"Projects retrieved successfully: {len(response.json()["records"])} projects found")
 
     return response.json()
 

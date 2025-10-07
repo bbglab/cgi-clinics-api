@@ -38,7 +38,7 @@ def get_all_sequencing_types(project_uuid: str, main_headers: dict[str, str]) ->
         raise requests.exceptions.HTTPError(
             f"Failed to fetch sequencing types (Error {response.status_code}): {response.text}"
         )
-    print(f"Fetched {len(response.json())} sequencing types")
+    print(f"Fetched {len(response.json()["records"])} sequencing types")
 
     return response.json()
 
@@ -85,7 +85,7 @@ def get_all_sequencing_types_paginated(
         raise requests.exceptions.HTTPError(
             f"Failed to fetch sequencing types (Error {response.status_code}): {response.text}"
         )
-    print(f"Fetched {len(response.json())} sequencing types")
+    print(f"Fetched {len(response.json()["records"])} sequencing types")
 
     return response.json()
 

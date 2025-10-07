@@ -46,7 +46,7 @@ def get_all_hospitals(project_uuid: str, main_headers: dict[str, str], size: int
     if not 200 <= response.status_code < 300:
         print(f"Failed to fetch hospitals: {response.status_code} - {response.text}")
         raise requests.exceptions.HTTPError(f"Failed to fetch hospitals: {response.status_code} - {response.text}")
-    print(f"Fetched {len(response.json())} hospitals")
+    print(f"Fetched {len(response.json()["records"])} hospitals")
 
     return response.json()
 

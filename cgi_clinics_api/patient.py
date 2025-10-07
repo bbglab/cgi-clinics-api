@@ -68,7 +68,7 @@ def get_all_patients(
     if not 200 <= response.status_code < 300:
         print(f"Failed to get patients: {response.status_code} - {response.text}")
         raise requests.exceptions.HTTPError(f"Failed to get patients: {response.status_code} - {response.text}")
-    print(f"Patients retrieved successfully: {len(response.json())} patients found")
+    print(f"Patients retrieved successfully: {len(response.json()["records"])} patients found")
 
     return response.json()
 
@@ -135,7 +135,7 @@ def get_all_patients_paginated(
     if not 200 <= response.status_code < 300:
         print(f"Failed to get patients: {response.status_code} - {response.text}")
         raise requests.exceptions.HTTPError(f"Failed to get patients: {response.status_code} - {response.text}")
-    print(f"Patients retrieved successfully: {len(response.json())} patients found")
+    print(f"Patients retrieved successfully: {len(response.json()["records"])} patients found")
 
     return response.json()
 

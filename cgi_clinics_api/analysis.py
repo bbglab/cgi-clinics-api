@@ -39,7 +39,7 @@ def get_all_analyses(project_uuid: str, main_headers: dict[str, str]) -> dict:
     if not 200 <= response.status_code < 300:
         print(f"Failed to get analyses: {response.status_code} - {response.text}")
         raise requests.exceptions.HTTPError(f"Failed to get analyses: {response.status_code} - {response.text}")
-    print(f"Analyses retrieved successfully: {len(response.json())} analyses found")
+    print(f"Analyses retrieved successfully: {len(response.json()["records"])} analyses found")
 
     return response.json()
 
@@ -82,7 +82,7 @@ def get_all_analyses_paginated(project_uuid: str, main_headers: dict[str, str], 
     if not 200 <= response.status_code < 300:
         print(f"Failed to get analyses: {response.status_code} - {response.text}")
         raise requests.exceptions.HTTPError(f"Failed to get analyses: {response.status_code} - {response.text}")
-    print(f"Analyses retrieved successfully: {len(response.json())} analyses found")
+    print(f"Analyses retrieved successfully: {len(response.json()["records"])} analyses found")
 
     return response.json()
 

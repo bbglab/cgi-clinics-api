@@ -38,7 +38,7 @@ def get_all_sequencing_centers(project_uuid: str, main_headers: dict[str, str]) 
         raise requests.exceptions.HTTPError(
             f"Failed to fetch sequencing centers: {response.status_code} - {response.text}"
         )
-    print(f"Fetched {len(response.json())} sequencing centers")
+    print(f"Fetched {len(response.json()["records"])} sequencing centers")
 
     return response.json()
 
@@ -86,7 +86,7 @@ def get_all_sequencing_centers_paginated(
         raise requests.exceptions.HTTPError(
             f"Failed to fetch sequencing centers: {response.status_code} - {response.text}"
         )
-    print(f"Fetched {len(response.json())} sequencing centers")
+    print(f"Fetched {len(response.json()["records"])} sequencing centers")
 
     return response.json()
 
