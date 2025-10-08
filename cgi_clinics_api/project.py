@@ -43,7 +43,7 @@ def get_all_projects(main_headers: dict[str, str], name: str | None = None, size
         "page": page,
     }
     response: requests.Response = requests.get(
-        "https://platform.cgiclinics.eu/api/1.0/project/full", headers=main_headers, timeout=20, params=params
+        "https://platform.cgiclinics.eu/api/1.0/user/project/full", headers=main_headers, timeout=20, params=params
     )
     if not 200 <= response.status_code < 300:
         print(f"Failed to get projects: {response.status_code} - {response.text}")
