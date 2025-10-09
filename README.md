@@ -8,22 +8,23 @@ The official CGI-Clinics API documentation can be found here:
 
 ## Index
 
-- [CGI-Clinics API Python Client](#cgi-clinics-api-python-client)
-  - [Index](#index)
-  - [Overall Structure](#overall-structure)
-  - [Authentication](#authentication)
-  - [Understanding Function Parameters](#understanding-function-parameters)
-  - [Modules and Endpoints](#modules-and-endpoints)
-    - [`cgi_clinics_api.analysis`](#cgi_clinics_apianalysis)
-    - [`cgi_clinics_api.hospital`](#cgi_clinics_apihospital)
-    - [`cgi_clinics_api.patient`](#cgi_clinics_apipatient)
-    - [`cgi_clinics_api.project`](#cgi_clinics_apiproject)
-    - [`cgi_clinics_api.sample`](#cgi_clinics_apisample)
-    - [`cgi_clinics_api.sequencing`](#cgi_clinics_apisequencing)
-    - [`cgi_clinics_api.sequencing-center`](#cgi_clinics_apisequencing-center)
-    - [`cgi_clinics_api.sequencing-type`](#cgi_clinics_apisequencing-type)
-  - [How to Use](#how-to-use)
-  - [Feedback](#feedback)
+1. [CGI-Clinics API Python Client](#cgi-clinics-api-python-client)
+    1. [Index](#index)
+    2. [Overall Structure](#overall-structure)
+    3. [Authentication](#authentication)
+    4. [Understanding Function Parameters](#understanding-function-parameters)
+    5. [Pagination Limits](#pagination-limits)
+    6. [Modules and Endpoints](#modules-and-endpoints)
+        1. [`cgi_clinics_api.analysis`](#cgi_clinics_apianalysis)
+        2. [`cgi_clinics_api.hospital`](#cgi_clinics_apihospital)
+        3. [`cgi_clinics_api.patient`](#cgi_clinics_apipatient)
+        4. [`cgi_clinics_api.project`](#cgi_clinics_apiproject)
+        5. [`cgi_clinics_api.sample`](#cgi_clinics_apisample)
+        6. [`cgi_clinics_api.sequencing`](#cgi_clinics_apisequencing)
+        7. [`cgi_clinics_api.sequencing-center`](#cgi_clinics_apisequencing-center)
+        8. [`cgi_clinics_api.sequencing-type`](#cgi_clinics_apisequencing-type)
+    7. [How to Use](#how-to-use)
+    8. [Feedback](#feedback)
 
 ## Overall Structure
 
@@ -122,9 +123,6 @@ while True:
 
 Below is a breakdown of each module and the API endpoints it covers.
 
-> [!NOTE]
-> Functions marked with ⚠️ require superadmin role to work. Regular users should use the paginated version of these functions instead.
-
 ---
 
 ### `cgi_clinics_api.analysis`
@@ -133,7 +131,7 @@ This module provides functions to interact with analysis-related endpoints.
 
 | Function Name                    | Description                                                 |
 | :------------------------------- | :---------------------------------------------------------- |
-| `get_all_analyses` ⚠️            | Retrieves all analyses for a given project.                 |
+| `get_all_analyses`               | Retrieves all analyses for a given project.                 |
 | `get_all_analyses_paginated`     | Retrieves analyses for a given project with pagination.     |
 | `get_analysis_by_uuid`           | Retrieves a specific analysis by its UUID.                  |
 | `get_analysis_result_files`      | Downloads the result files of a CGI analysis as a zip file. |
@@ -161,7 +159,7 @@ This module provides functions to interact with hospital-related endpoints.
 
 | Function Name          | Description                                                |
 | :--------------------- | :--------------------------------------------------------- |
-| `get_all_hospitals` ⚠️ | Retrieves all hospitals within a project, with pagination. |
+| `get_all_hospitals`    | Retrieves all hospitals within a project, with pagination. |
 | `create_hospital`      | Creates a new hospital within a project.                   |
 | `update_hospital`      | Updates an existing hospital's name.                       |
 | `delete_hospital`      | Deletes a hospital from a project.                         |
@@ -174,7 +172,7 @@ This module provides functions to interact with patient-related endpoints.
 
 | Function Name                | Description                                                                 |
 | :--------------------------- | :-------------------------------------------------------------------------- |
-| `get_all_patients` ⚠️        | Retrieves all patients within a project, with optional filtering.           |
+| `get_all_patients`           | Retrieves all patients within a project, with optional filtering.           |
 | `get_all_patients_paginated` | Retrieves patients within a project with pagination and optional filtering. |
 | `get_patient_by_uuid`        | Retrieves a specific patient by their UUID.                                 |
 | `create_patient`             | Creates a new patient within a project.                                     |
@@ -189,7 +187,7 @@ This module provides functions to interact with project-related endpoints.
 
 | Function Name                | Description                                                          |
 | :--------------------------- | :------------------------------------------------------------------- |
-| `get_all_projects` ⚠️        | Retrieves all projects, with optional name filtering and pagination. |
+| `get_all_projects`           | Retrieves all projects, with optional name filtering and pagination. |
 | `get_all_projects_paginated` | Retrieves all projects with pagination and optional name filtering.  |
 | `get_project_by_uuid`        | Retrieves a specific project by its UUID.                            |
 | `create_project`             | Creates a new project.                                               |
@@ -203,7 +201,7 @@ This module provides functions to interact with sample-related endpoints.
 
 | Function Name               | Description                                                                                |
 | :-------------------------- | :----------------------------------------------------------------------------------------- |
-| `get_all_samples` ⚠️        | Retrieves all samples for given project(s), optionally filtered by patient(s).             |
+| `get_all_samples`           | Retrieves all samples for given project(s), optionally filtered by patient(s).             |
 | `get_all_samples_paginated` | Retrieves samples for given project(s) with pagination, optionally filtered by patient(s). |
 | `get_sample_by_uuid`        | Retrieves a specific sample by its UUID.                                                   |
 | `create_sample`             | Creates a new sample for a patient.                                                        |
@@ -218,7 +216,7 @@ This module provides functions to interact with sequencing-related endpoints.
 
 | Function Name                   | Description                                                                                                      |
 | :------------------------------ | :--------------------------------------------------------------------------------------------------------------- |
-| `get_all_sequencings` ⚠️        | Retrieves all sequencings for given project(s), with optional filtering by patient(s), sample(s), or patient ID. |
+| `get_all_sequencings`           | Retrieves all sequencings for given project(s), with optional filtering by patient(s), sample(s), or patient ID. |
 | `get_all_sequencings_paginated` | Retrieves sequencings for a project with pagination and optional filtering.                                      |
 | `get_sequencing_by_uuid`        | Retrieves a specific sequencing by its UUID.                                                                     |
 | `create_sequencing`             | Creates a new sequencing record.                                                                                 |
@@ -233,7 +231,7 @@ This module provides functions to interact with sequencing center-related endpoi
 
 | Function Name                          | Description                                                 |
 | :------------------------------------- | :---------------------------------------------------------- |
-| `get_all_sequencing_centers` ⚠️        | Retrieves all sequencing centers for a project.             |
+| `get_all_sequencing_centers`           | Retrieves all sequencing centers for a project.             |
 | `get_all_sequencing_centers_paginated` | Retrieves sequencing centers for a project with pagination. |
 | `create_sequencing_center`             | Creates a new sequencing center within a project.           |
 | `update_sequencing_center`             | Updates an existing sequencing center's name.               |
@@ -247,7 +245,7 @@ This module provides functions to interact with sequencing type-related endpoint
 
 | Function Name                        | Description                                               |
 | :----------------------------------- | :-------------------------------------------------------- |
-| `get_all_sequencing_types` ⚠️        | Retrieves all sequencing types for a project.             |
+| `get_all_sequencing_types`           | Retrieves all sequencing types for a project.             |
 | `get_all_sequencing_types_paginated` | Retrieves sequencing types for a project with pagination. |
 | `create_sequencing_type`             | Creates a new sequencing type within a project.           |
 | `update_sequencing_type`             | Updates an existing sequencing type's name.               |
