@@ -3,6 +3,7 @@
 from pathlib import Path
 
 from cgi_clinics_api.analysis import get_all_analyses, get_analysis_result_files
+from cgi_clinics_api.headers import get_api_token
 from cgi_clinics_api.project import get_all_projects
 
 
@@ -57,6 +58,18 @@ def download_all_analyses_results(project_name: str, output_dir: Path, main_head
     if skipped_analyses:
         print("The following analyses were skipped because they are not completed or resulted in an error:")
         for analysis in skipped_analyses:
-            print(
-                f"- Analysis {analysis['uuid']} for patient {analysis['patient']['patient_id']} with status {analysis['status']}"
-            )
+            print(f"- Analysis {analysis['uuid']} for patient {analysis['patientId']} with status {analysis['status']}")
+
+
+if __name__ == "__main__":
+    # Test download_all_analyses_results function
+    main_headers: dict[str, str] = {
+        "X-Api-Key": get_api_token(),
+    }
+
+    project_name: str = "TEST - Carlos"
+    output_dir: Path = Path("outputs")
+    output_dir.mkdir(exist_ok=True)
+
+    download_all_analyses_results(project_name, output_dir, main_headers)
+    print("All analyses downloaded")
