@@ -8,7 +8,7 @@ from cgi_clinics_api.project import get_all_projects
 
 
 def download_all_analyses_results(project_name: str, output_dir: Path, main_headers: dict[str, str]) -> None:
-    """Download all analyses results from a project.
+    """Download all analyses results from a project. The analyses are saved as zip files in the output directory.
 
     Parameters
     ----------
@@ -18,10 +18,11 @@ def download_all_analyses_results(project_name: str, output_dir: Path, main_head
         Directory to save the downloaded analyses.
     main_headers : dict[str, str]
         Headers for the API request.
+
     Returns
     -------
     None
-        The analyses are downloaded as zip files.
+
     Raises
     ------
     requests.exceptions.HTTPError
@@ -67,7 +68,7 @@ if __name__ == "__main__":
         "X-Api-Key": get_api_token(),
     }
 
-    project_name: str = "TEST - Carlos"
+    project_name: str = "<YOUR_PROJECT_NAME>"
     output_dir: Path = Path("outputs")
     output_dir.mkdir(exist_ok=True)
 
