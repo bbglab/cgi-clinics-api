@@ -56,7 +56,7 @@ def get_all_sequencings(
         raise requests.exceptions.HTTPError(
             f"Failed to get sequencings (Error {response.status_code}): {response.text}"
         )
-    print(f"Sequencings retrieved successfully: {len(response.json()["records"])} sequencings found")
+    print(f"Sequencings retrieved successfully: {len(response.json()['records'])} sequencings found")
 
     return response.json()
 
@@ -113,14 +113,17 @@ def get_all_sequencings_paginated(
         "page": page,
     }
     response: requests.Response = requests.get(
-        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing", headers=main_headers, timeout=20, params=params
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing",
+        headers=main_headers,
+        timeout=20,
+        params=params,
     )
     if not 200 <= response.status_code < 300:
         print(f"Failed to get sequencings (Error {response.status_code}): {response.text}")
         raise requests.exceptions.HTTPError(
             f"Failed to get sequencings (Error {response.status_code}): {response.text}"
         )
-    print(f"Sequencings retrieved successfully: {len(response.json()["records"])} sequencings found")
+    print(f"Sequencings retrieved successfully: {len(response.json()['records'])} sequencings found")
 
     return response.json()
 
@@ -178,7 +181,7 @@ def create_sequencing(
     main_headers: dict[str, str],
     sample_uuid: str | None = None,
     sequencing_id: str | None = None,
-    sequencing_type: str | None = None,
+    sequencing_type: str | Literal["other", "unknown"] | None = None,
     sequencing_type_other: str | None = None,
     center: str | None = None,
     center_other: str | None = None,
@@ -198,8 +201,8 @@ def create_sequencing(
         UUID of the sample associated with this sequencing.
     sequencing_id : str | None, optional
         Identifier for the sequencing, by default None.
-    sequencing_type : str | None, optional
-        Type of sequencing performed, by default None.
+    sequencing_type : str | Literal["other", "unknown"] | None, optional
+        Type of sequencing performed, by default None. If "other" is selected, provide the specific type in `sequencing_type_other`.
     sequencing_type_other : str | None, optional
         Additional type information if the standard types don't apply, by default None.
     center : str | None, optional
