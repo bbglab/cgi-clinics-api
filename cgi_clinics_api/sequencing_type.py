@@ -38,7 +38,7 @@ def get_all_sequencing_types(project_uuid: str, main_headers: dict[str, str]) ->
         raise requests.exceptions.HTTPError(
             f"Failed to fetch sequencing types (Error {response.status_code}): {response.text}"
         )
-    print(f"Fetched {len(response.json())} sequencing types")
+    print(f"Fetched {len(response.json()["records"])} sequencing types")
 
     return response.json()
 
@@ -55,7 +55,7 @@ def get_all_sequencing_types_paginated(
     main_headers : dict[str, str]
         Headers for the API request.
     size : int, optional
-        Number of sequencing types to retrieve per page, by default 10
+        Number of sequencing types to retrieve per page. Maximum value is 2000, by default 10
     page : int, optional
         Page number to retrieve, by default 0
 
@@ -66,16 +66,21 @@ def get_all_sequencing_types_paginated(
 
     Raises
     ------
+    ValueError
+        If size is greater than 2000.
     requests.exceptions.HTTPError
         If the request fails.
     """
+    if size > 2000:
+        raise ValueError("Due to API limitations, the maximum size per page is 2000")
+
     print("Fetching all sequencing types paginated")
     params: dict = {
         "size": size,
         "page": page,
     }
     response: requests.Response = requests.get(
-        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type/",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type",
         headers=main_headers,
         params=params,
         timeout=20,
@@ -85,7 +90,7 @@ def get_all_sequencing_types_paginated(
         raise requests.exceptions.HTTPError(
             f"Failed to fetch sequencing types (Error {response.status_code}): {response.text}"
         )
-    print(f"Fetched {len(response.json())} sequencing types")
+    print(f"Fetched {len(response.json()["records"])} sequencing types")
 
     return response.json()
 
@@ -123,7 +128,7 @@ def create_sequencing_type(project_uuid: str, main_headers: dict[str, str], sequ
         "name": sequencing_type_name,
     }
     response: requests.Response = requests.post(
-        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type/",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing-type",
         headers=main_headers,
         json=data,
         timeout=20,

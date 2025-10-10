@@ -8,7 +8,7 @@ import requests
 
 
 def get_all_hospitals(project_uuid: str, main_headers: dict[str, str], size: int = 10, page: int = 0) -> dict:
-    """Get all hospitals from the new CGI-Clinics Platform. This endpoint only works for users with superadmin role.
+    """Get all hospitals from the new CGI-Clinics Platform.
 
     Parameters
     ----------
@@ -17,7 +17,7 @@ def get_all_hospitals(project_uuid: str, main_headers: dict[str, str], size: int
     main_headers : dict[str, str]
         Headers for the API request.
     size : int, optional
-        Number of hospitals to retrieve per page, by default 10
+        Number of hospitals to retrieve per page. Maximum value is 2000, by default 10
     page : int, optional
         Page number to retrieve, by default 0
 
@@ -28,9 +28,14 @@ def get_all_hospitals(project_uuid: str, main_headers: dict[str, str], size: int
 
     Raises
     ------
+    ValueError
+        If size is greater than 2000.
     requests.exceptions.HTTPError
         If the request fails.
     """
+    if size > 2000:
+        raise ValueError("Due to API limitations, the maximum size per page is 2000")
+
     print("Fetching all hospitals")
     params: dict[str, int] = {
         "size": size,
@@ -46,7 +51,7 @@ def get_all_hospitals(project_uuid: str, main_headers: dict[str, str], size: int
     if not 200 <= response.status_code < 300:
         print(f"Failed to fetch hospitals: {response.status_code} - {response.text}")
         raise requests.exceptions.HTTPError(f"Failed to fetch hospitals: {response.status_code} - {response.text}")
-    print(f"Fetched {len(response.json())} hospitals")
+    print(f"Fetched {len(response.json()["records"])} hospitals")
 
     return response.json()
 
@@ -111,6 +116,8 @@ def update_hospital(project_uuid: str, hospital_uuid: str, main_headers: dict[st
         UUID of the hospital to update.
     main_headers : dict[str, str]
         Headers for the API request.
+    hospital_name : str
+        New name for the hospital.
 
     Returns
     -------

@@ -16,7 +16,7 @@ def get_all_sequencings(
     sample_uuids: list[str] | None = None,
     patient_id: str | None = None,
 ) -> dict:
-    """Get all sequencings from the new CGI-Clinics Platform. This endpoint only works for users with superadmin role.
+    """Get all sequencings from the new CGI-Clinics Platform.
 
     Parameters
     ----------
@@ -56,7 +56,7 @@ def get_all_sequencings(
         raise requests.exceptions.HTTPError(
             f"Failed to get sequencings (Error {response.status_code}): {response.text}"
         )
-    print(f"Sequencings retrieved successfully: {len(response.json())} sequencings found")
+    print(f"Sequencings retrieved successfully: {len(response.json()['records'])} sequencings found")
 
     return response.json()
 
@@ -85,7 +85,7 @@ def get_all_sequencings_paginated(
     sample_uuids : list[str] | None, optional
         List of sample UUIDs to filter by, by default None
     size : int
-        Number of sequencings to retrieve per page.
+        Number of sequencings to retrieve per page. Maximum value is 2000.
     page : int
         Page number to retrieve.
 
@@ -96,9 +96,14 @@ def get_all_sequencings_paginated(
 
     Raises
     ------
+    ValueError
+        If size is greater than 2000.
     requests.exceptions.HTTPError
         If the request fails.
     """
+    if size > 2000:
+        raise ValueError("Due to API limitations, the maximum size per page is 2000")
+
     print("Fetching all sequencings")
     params: dict = {
         "projectUuids": project_uuids,
@@ -108,14 +113,17 @@ def get_all_sequencings_paginated(
         "page": page,
     }
     response: requests.Response = requests.get(
-        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing", headers=main_headers, timeout=20, params=params
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing",
+        headers=main_headers,
+        timeout=20,
+        params=params,
     )
     if not 200 <= response.status_code < 300:
         print(f"Failed to get sequencings (Error {response.status_code}): {response.text}")
         raise requests.exceptions.HTTPError(
             f"Failed to get sequencings (Error {response.status_code}): {response.text}"
         )
-    print(f"Sequencings retrieved successfully: {len(response.json())} sequencings found")
+    print(f"Sequencings retrieved successfully: {len(response.json()['records'])} sequencings found")
 
     return response.json()
 
@@ -171,10 +179,9 @@ def get_sequencing_by_uuid(
 def create_sequencing(
     project_uuid: str,
     main_headers: dict[str, str],
-    sequencing_uuid: str,
     sample_uuid: str | None = None,
     sequencing_id: str | None = None,
-    sequencing_type: str | None = None,
+    sequencing_type: str | Literal["other", "unknown"] | None = None,
     sequencing_type_other: str | None = None,
     center: str | None = None,
     center_other: str | None = None,
@@ -188,17 +195,15 @@ def create_sequencing(
     ----------
     project_uuid : str
         UUID of the project where the sequencing will be created.
-    sequencing_uuid : str
-        UUID to assign to the new sequencing.
     main_headers : dict[str, str]
         Headers to include in the API request.
     sample_uuid : str | None, optional
         UUID of the sample associated with this sequencing.
     sequencing_id : str | None, optional
         Identifier for the sequencing, by default None.
-    type : str | None, optional
-        Type of sequencing performed, by default None.
-    type_other : str | None, optional
+    sequencing_type : str | Literal["other", "unknown"] | None, optional
+        Type of sequencing performed, by default None. If "other" is selected, provide the specific type in `sequencing_type_other`.
+    sequencing_type_other : str | None, optional
         Additional type information if the standard types don't apply, by default None.
     center : str | None, optional
         Center where the sequencing was performed, by default None.
@@ -238,7 +243,7 @@ def create_sequencing(
 
     # Make the API request
     response: requests.Response = requests.post(
-        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing/{sequencing_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sequencing",
         headers=main_headers,
         json=sequencing_data,
         timeout=20,

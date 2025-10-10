@@ -12,7 +12,7 @@ import requests
 def get_all_samples(
     project_uuids: list[str], main_headers: dict[str, str], patient_uuids: list[str] | None = None
 ) -> dict:
-    """Get all samples from the new CGI-Clinics Platform. This endpoint only works for users with superadmin role.
+    """Get all samples from the new CGI-Clinics Platform.
 
     Parameters
     ----------
@@ -39,7 +39,7 @@ def get_all_samples(
         "patientUuids": ",".join(patient_uuids) if patient_uuids else None,
     }
     response: requests.Response = requests.get(
-        "https://platform.cgiclinics.eu/api/1.0/sample/full", headers=main_headers, timeout=20, json=body
+        "https://platform.cgiclinics.eu/api/1.0/sample/full", headers=main_headers, timeout=20, params=body
     )
 
     if not 200 <= response.status_code < 300:
@@ -53,9 +53,8 @@ def get_all_samples(
 
 def get_all_samples_paginated(
     project_uuid: str,
-    project_uuids: list[str],
     main_headers: dict[str, str],
-    patient_uuids: list[str] | None = None,
+    patient_uuid: str | None = None,
     size: int = 10,
     page: int = 0,
 ) -> dict:
@@ -63,14 +62,14 @@ def get_all_samples_paginated(
 
     Parameters
     ----------
-    project_uuids : list[str]
-        List of project UUIDs.
+    project_uuid : str
+        Project UUID to query.
     main_headers : dict[str, str]
         Headers for the API request.
-    patient_uuids : list[str], optional
-        List of patient UUIDs, by default None
+    patient_uuid : str | None, optional
+        Patient UUID to filter by, by default None
     size : int
-        Number of samples to retrieve per page.
+        Number of samples to retrieve per page. Maximum value is 2000.
     page : int
         Page number to retrieve.
 
@@ -81,28 +80,33 @@ def get_all_samples_paginated(
 
     Raises
     ------
+    ValueError
+        If size is greater than 2000.
     requests.exceptions.HTTPError
         If the request fails.
     """
-    print(f"Fetching samples for projects: {project_uuids}")
+    if size > 2000:
+        raise ValueError("Due to API limitations, the maximum size per page is 2000")
+
+    print(f"Fetching samples for project: {project_uuid}")
     body: dict = {
-        "projectUuids": project_uuids,
-        "patientUuids": patient_uuids,
+        "projectUuid": project_uuid,
+        "patientUuid": patient_uuid,
         "size": size,
         "page": page,
     }
     response: requests.Response = requests.get(
-        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/sample",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sample",
         headers=main_headers,
         timeout=20,
-        json=body,
+        params=body,
     )
 
     if not 200 <= response.status_code < 300:
         print(f"Failed to get samples (Error {response.status_code}): {response.text}")
         raise requests.exceptions.HTTPError(f"Failed to get samples (Error {response.status_code}): {response.text}")
 
-    print(f"Samples retrieved successfully for projects: {project_uuids}")
+    print(f"Samples retrieved successfully for project: {project_uuid}")
 
     return response.json()
 
@@ -131,7 +135,7 @@ def get_sample_by_uuid(project_uuid: str, sample_uuid: str, main_headers: dict[s
     """
     print(f"Fetching sample {sample_uuid} for project {project_uuid}")
     response: requests.Response = requests.get(
-        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/sample/{sample_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sample/{sample_uuid}",
         headers=main_headers,
         timeout=20,
     )
@@ -153,7 +157,6 @@ def get_sample_by_uuid(project_uuid: str, sample_uuid: str, main_headers: dict[s
 
 def create_sample(
     project_uuid: str,
-    sample_uuid: str,
     main_headers: dict[str, str],
     patient_uuid: str | None = None,
     sample_id: str | None = None,
@@ -185,6 +188,8 @@ def create_sample(
     share_for_research: bool | None = None,
     date: str | None = None,
     biomarkers: list[dict] | None = None,
+    informed_consent: bool | None = None,
+    non_consent_reason: str | None = None,
 ) -> dict:
     """Create a new sample in the CGI-Clinics Platform.
 
@@ -192,8 +197,6 @@ def create_sample(
     ----------
     project_uuid : str
         UUID of the project where the sample will be created.
-    sample_uuid : str
-        UUID for the new sample.
     main_headers : dict[str, str]
         Headers to include in the API request.
     patient_uuid : str | None
@@ -222,7 +225,11 @@ def create_sample(
         Date when sample was taken (format YYYY-MM-DD), by default None.
     biomarkers : list[dict] | None, optional
         List of biomarkers with schema:
-        [{"code": str, "codeOther": str, "value": str, "unit": str}]
+        [{"code": str, "codeOther": "PDL1_VALUE" | "PDL1_EXPRESSION" | "MSI_H" | "DMMR" | "TMB" | "ER" | "PR" | "HER2" | "OTHER", "value": str, "unit": str}]
+    informed_consent : bool | None, optional
+        Whether informed consent was obtained, by default None.
+    non_consent_reason : str | None, optional
+        Reason for non-consent if informed_consent is False, by default None.
 
     Returns
     -------
@@ -251,11 +258,13 @@ def create_sample(
         "shareForResearch": share_for_research,
         "date": date,
         "biomarkers": biomarkers,
+        "informedConsent": informed_consent,
+        "nonConsentReason": non_consent_reason,
     }
 
     # Make the API request
     response: requests.Response = requests.post(
-        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/sample/{sample_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sample",
         headers=main_headers,
         json=body,
         timeout=20,
@@ -309,6 +318,9 @@ def update_sample(
     informed_consent_notes: str | None = None,
     share_for_research: bool | None = None,
     date: str | None = None,
+    biomarkers: list[dict] | None = None,
+    informed_consent: bool | None = None,
+    non_consent_reason: str | None = None,
 ) -> dict:
     """Update an existing sample in the CGI-Clinics Platform.
 
@@ -347,7 +359,7 @@ def update_sample(
         Date when sample was taken (format YYYY-MM-DD), by default None.
     biomarkers : list[dict] | None, optional
         List of biomarkers with schema:
-        [{"code": str, "codeOther": str, "value": str, "unit": str}]
+        [{"code": str, "codeOther": "PDL1_VALUE" | "PDL1_EXPRESSION" | "MSI_H" | "DMMR" | "TMB" | "ER" | "PR" | "HER2" | "OTHER", "value": str, "unit": str}]
     """
     print(f"Updating sample with ID: {sample_uuid} for patient: {patient_uuid}")
     # Build the request payload
@@ -364,10 +376,13 @@ def update_sample(
         "informedConsentNotes": informed_consent_notes,
         "shareForResearch": share_for_research,
         "date": date,
+        "biomarkers": biomarkers,
+        "informedConsent": informed_consent,
+        "nonConsentReason": non_consent_reason,
     }
     # Make the API request
     response: requests.Response = requests.put(
-        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/sample/{sample_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sample/{sample_uuid}",
         headers=main_headers,
         json=body,
         timeout=20,
@@ -409,7 +424,7 @@ def delete_sample(project_uuid: str, sample_uuid: str, main_headers: dict[str, s
     """
     print(f"Deleting sample {sample_uuid} for project {project_uuid}")
     response: requests.Response = requests.delete(
-        f"https://platform.cgiclinics.eu/api/1.0/{project_uuid}/sample/{sample_uuid}",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/sample/{sample_uuid}",
         headers=main_headers,
         timeout=20,
     )

@@ -11,7 +11,7 @@ import requests
 
 
 def get_all_analyses(project_uuid: str, main_headers: dict[str, str]) -> dict:
-    """Get all analyses from the new CGI-Clinics Platform. This endpoint only works for users with superadmin role.
+    """Get all analyses from the new CGI-Clinics Platform.
 
     Parameters
     ----------
@@ -39,7 +39,7 @@ def get_all_analyses(project_uuid: str, main_headers: dict[str, str]) -> dict:
     if not 200 <= response.status_code < 300:
         print(f"Failed to get analyses: {response.status_code} - {response.text}")
         raise requests.exceptions.HTTPError(f"Failed to get analyses: {response.status_code} - {response.text}")
-    print(f"Analyses retrieved successfully: {len(response.json())} analyses found")
+    print(f"Analyses retrieved successfully: {len(response.json()["records"])} analyses found")
 
     return response.json()
 
@@ -54,7 +54,7 @@ def get_all_analyses_paginated(project_uuid: str, main_headers: dict[str, str], 
     main_headers : dict[str, str]
         Headers for the API request.
     size : int
-        Number of analyses to retrieve per page.
+        Number of analyses to retrieve per page. Maximum value is 2000.
     page : int
         Page number to retrieve.
 
@@ -65,16 +65,21 @@ def get_all_analyses_paginated(project_uuid: str, main_headers: dict[str, str], 
 
     Raises
     ------
+    ValueError
+        If size is greater than 2000.
     requests.exceptions.HTTPError
         If the request fails.
     """
+    if size > 2000:
+        raise ValueError("Due to API limitations, the maximum size per page is 2000")
+
     print(f"Fetching all analyses (paginated) for page {page} with size {size}")
     params: dict = {
         "size": size,
         "page": page,
     }
     response: requests.Response = requests.get(
-        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis/",
+        f"https://platform.cgiclinics.eu/api/1.0/project/{project_uuid}/analysis",
         headers=main_headers,
         timeout=20,
         params=params,
@@ -82,7 +87,7 @@ def get_all_analyses_paginated(project_uuid: str, main_headers: dict[str, str], 
     if not 200 <= response.status_code < 300:
         print(f"Failed to get analyses: {response.status_code} - {response.text}")
         raise requests.exceptions.HTTPError(f"Failed to get analyses: {response.status_code} - {response.text}")
-    print(f"Analyses retrieved successfully: {len(response.json())} analyses found")
+    print(f"Analyses retrieved successfully: {len(response.json()["records"])} analyses found")
 
     return response.json()
 
@@ -512,6 +517,7 @@ def get_analysis_result_fusions(
 def create_analysis(
     project_uuid: str,
     main_headers: dict[str, str],
+    sequencing_uuid: str,
     reference_genome: Literal["HG19", "HG38"],
     analysis_id: str,
     input_files: list[Path] | None = None,
@@ -573,6 +579,7 @@ def create_analysis(
 
     # Prepare the request body
     request_body: dict = {
+        "sequencingUuid": sequencing_uuid,
         "analysisId": analysis_id,
         "referenceGenome": reference_genome,
     }
