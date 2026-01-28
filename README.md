@@ -302,6 +302,7 @@ This module provides functions to interact with sequencing type-related endpoint
 >         sequencing_type=sequencing_type,
 >         reference_genome=reference_genome,
 >         sequencing_germline_control="YES",
+>         informed_consent=True,
 >         input_files=input_files
 >     )
 >     print(f"Analysis created: {analysis_result.get('uuid')}")
